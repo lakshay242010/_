@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import time
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps, ImageDraw
 from sklearn.ensemble import RandomForestClassifier
 
@@ -110,13 +111,27 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Partner Badge */
-    .partner-glow {
-        background: linear-gradient(90deg, rgba(163, 230, 53, 0.1) 0%, rgba(101, 163, 13, 0.05) 100%);
-        border-left: 4px solid #a3e635;
-        padding: 24px;
-        border-radius: 12px;
+    /* Acknowledgement Card */
+    .ack-glow {
+        background: linear-gradient(135deg, rgba(163, 230, 53, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%);
+        border-left: 5px solid #a3e635;
+        border-radius: 16px;
+        padding: 30px;
         margin-top: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* AI Thinking Status Badge */
+    .thinking-badge {
+        color: #a3e635;
+        font-size: 13px;
+        font-weight: 600;
+        background: rgba(163, 230, 53, 0.1);
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(163, 230, 53, 0.3);
+        display: inline-block;
+        margin-bottom: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -185,10 +200,59 @@ def train_biosync_model():
 model = train_biosync_model()
 
 # -----------------------------------------------------------------------------
-# 4. SIDEBAR NAVIGATION
+# 4. ADVANCED REASONING ENGINE FOR BIOSYNC AI TALK
+# -----------------------------------------------------------------------------
+def generate_ai_response(query):
+    q_lower = query.lower()
+    
+    # 1. Platform & Developer Specifics
+    if "creator" in q_lower or "developer" in q_lower or "lakshay" in q_lower or "who made" in q_lower:
+        return ("**BioSyncAI** was created by **Lakshay of Class XI A** under the guidance of **Ms. Nisha Yadav Mam** for the **OlympAI Hackathon 2026**.\n\n"
+                "It represents an enterprise-grade, dark-themed AgTech platform designed to model global agricultural monitoring systems like Cropin.")
+    
+    # 2. Vision 2057 & Autonomous Robotics
+    elif "2057" in q_lower or "robot" in q_lower or "future" in q_lower or "drone" in q_lower:
+        return ("Our **Vision 2057 Roadmap** targets **100% autonomous robotic agriculture** by the year 2057.\n\n"
+                "* **Phase 1 (2026-2035):** AI Cloud analytics & multispectral disease detection.\n"
+                "* **Phase 2 (2035-2045):** Drone swarms for thermal scanning & aerial micro-spraying.\n"
+                "* **Phase 3 (2045-2057):** Solar-powered field robots performing zero-chemical harvesting and automated seeding.")
+
+    # 3. Spatial Heatmap & Satellite Telemetry
+    elif "heatmap" in q_lower or "spatial" in q_lower or "satellite" in q_lower or "grid" in q_lower:
+        return ("The **Spatial Health Heatmap** correlates real-time microclimate parameters (Soil Moisture, Temperature, Humidity) with Random Forest prediction probability to map disease risk flags across field zones.")
+
+    # 4. Multispectral Vision & NDVI
+    elif "ndvi" in q_lower or "vision" in q_lower or "multispectral" in q_lower or "leaf" in q_lower:
+        return ("The **Multispectral Vision Engine** applies three specialized optical channels:\n"
+                "1. **Chlorophyll Index (Pseudo-NDVI):** Highlights photosynthetically active vegetation.\n"
+                "2. **Lesion Edge Tracer:** Enhances structural boundaries of fungal leaf spots.\n"
+                "3. **Thermal Anomaly Map:** Maps transpiration changes caused by root rot or drought.")
+
+    # 5. Multimodal AI Disease Prediction
+    elif "disease" in q_lower or "ai" in q_lower or "model" in q_lower or "inference" in q_lower:
+        return ("The **Multimodal AI Engine** leverages a trained Random Forest model (3,000 samples) taking inputs for Soil Moisture, Temp, Humidity, Rain, and Bio-Resonance Frequency (300-900 Hz) to output fungal blight probabilities with up to 92.4% accuracy.")
+
+    # 6. Yield Outlook & Irrigation
+    elif "yield" in q_lower or "water" in q_lower or "irrigation" in q_lower:
+        return ("The **Yield Outlook & Water Grid** evaluates moisture saturation levels (e.g. 78%) to optimize micro-irrigation flow, reducing agricultural water consumption by up to 25%.")
+
+    # 7. General Agriculture & AgTech Questions
+    elif "agtech" in q_lower or "farming" in q_lower or "soil" in q_lower or "crop" in q_lower:
+        return ("**Modern AgTech** integrates IoT sensor telemetry, satellite remote sensing, computer vision, and machine learning. "
+                "By combining ground sensors with orbital imagery, farmers can transition from reactive farming to predictive precision agriculture.")
+
+    # 8. Fallback Smart Response
+    else:
+        return (f"Thank you for asking about: *'{query}'*.\n\n"
+                "**BioSyncAI** provides real-time agricultural intelligence through its 11 integrated modules—including "
+                "Spatial Heatmaps, Multispectral Vision, Multimodal Machine Learning, and the **Vision 2057 Autonomous Farming Roadmap**. "
+                "Feel free to ask how any specific module works!")
+
+# -----------------------------------------------------------------------------
+# 5. SIDEBAR NAVIGATION
 # -----------------------------------------------------------------------------
 st.sidebar.markdown("<h2 style='color:#a3e635 !important; font-weight:800;'>BioSyncAI Core</h2>", unsafe_allow_html=True)
-st.sidebar.caption("⚡ Autonomous AgTech & Robotic Mesh")
+st.sidebar.caption("⚡ Autonomous AgTech Platform")
 
 menu = st.sidebar.radio(
     "Navigation System",
@@ -203,12 +267,12 @@ menu = st.sidebar.radio(
         "📞 Request Enterprise Demo",
         "💼 Careers & Talent Hub",
         "📄 RFP Report Generator",
-        "ℹ️ Partner & Acknowledgements"
+        "📜 Acknowledgements"
     ]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.info("📡 **Autonomous Mesh:** Active\n🤖 **Robotic Swarm:** 2057 Roadmap\n🧬 **Partner:** ALGORITHMIC TITANS")
+st.sidebar.info("👨‍💻 **Lead Developer:** Lakshay (Class XI A)\n🤖 **Robotic Swarm:** Vision 2057\n🏫 **OlympAI Hackathon 2026**")
 
 # -----------------------------------------------------------------------------
 # MODULE 1: PLATFORM OVERVIEW
@@ -240,51 +304,56 @@ if menu == "🚀 Platform Overview":
         st.write("Fully automated sowing, weeding, and targeted intervention robotics.")
 
 # -----------------------------------------------------------------------------
-# MODULE 2: BIOSYNC AI TALK (INTERACTIVE ASSISTANT)
+# MODULE 2: BIOSYNC AI TALK (ADVANCED ASSISTANT WITH THINKING STATUS)
 # -----------------------------------------------------------------------------
 elif menu == "💬 BioSync AI Talk (Assistant)":
     st.markdown("<h1 style='color:#a3e635;'>BioSync AI Talk Assistant</h1>", unsafe_allow_html=True)
-    st.write("Ask any questions regarding AgTech, modern farming practices, soil health, crop diagnostics, or how to use BioSyncAI features!")
+    st.write("Ask any questions regarding AgTech, modern farming practices, soil health, crop diagnostics, or platform features!")
 
-    # Initialize Chat History in Session State
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
-            {"role": "assistant", "content": "Hello! I am your BioSyncAI AgTech Assistant. How can I assist you with agricultural queries, smart farming, or site navigation today?"}
+            {"role": "assistant", "content": "Hello! I am BioSyncAI's intelligent assistant. How can I help you with agricultural technology, diagnostics, or site features today?"}
         ]
 
-    # Render Chat History
+    # Render Chat Messages
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    # Chat Input Box
-    user_query = st.chat_input("Type your question here (e.g., 'How does the Spatial Heatmap work?' or 'What is NDVI?')...")
+    user_query = st.chat_input("Type your message here (e.g., 'How does the AI model work?' or 'What is Vision 2057?')...")
 
     if user_query:
+        # Render User Message
         st.session_state.chat_history.append({"role": "user", "content": user_query})
         with st.chat_message("user"):
             st.write(user_query)
 
-        # Smart Knowledge Base Rules for Instant Response
-        q_lower = user_query.lower()
-        if "heatmap" in q_lower or "spatial" in q_lower:
-            response = "The **Spatial Health Heatmap** uses satellite imagery and sensor microclimate data (soil moisture, temperature, humidity) to create a color-coded grid mapping disease risks across your farm fields."
-        elif "ndvi" in q_lower or "vision" in q_lower or "multispectral" in q_lower:
-            response = "The **Multispectral Vision Engine** applies optical filters like Pseudo-NDVI (Normalized Difference Vegetation Index) and Thermal Anomaly maps to detect hidden crop stress, leaf damage, or fungal pathogens before they become visible to the naked eye."
-        elif "2057" in q_lower or "robot" in q_lower or "future" in q_lower:
-            response = "Our **Vision 2057 Roadmap** plans for 100% autonomous, robotic farming worldwide—utilizing solar-powered autonomous rovers and drones for seeding, weeding, and chemical-free micro-harvesting."
-        elif "disease" in q_lower or "ai" in q_lower or "model" in q_lower or "inference" in q_lower:
-            response = "The **Multimodal AI Engine** combines live microclimate metrics (humidity, rain, bio-resonance frequency) using a Random Forest machine learning classifier to predict fungal blight threats with high confidence."
-        elif "partner" in q_lower or "contact" in q_lower or "titans" in q_lower:
-            response = "BioSyncAI is developed by **ALGORITHMIC TITANS**. You can contact our core enterprise team directly at `algorithmictitans113@gmail.com`."
-        elif "irrigation" in q_lower or "yield" in q_lower or "water" in q_lower:
-            response = "The **Yield Outlook & Water Grid** tracks harvest tonnage forecasts and soil saturation levels to provide automated irrigation recommendations, conserving up to 25% water."
-        else:
-            response = f"That is a great question regarding AgTech! **BioSyncAI** integrates IoT sensor telemetry, satellite remote sensing, computer vision, and machine learning models to help agribusinesses optimize yields and achieve sustainable farming goals. If you have specific questions about our diagnostic modules, feel free to ask!"
-
-        st.session_state.chat_history.append({"role": "assistant", "content": response})
+        # Render Assistant Response with Live "Thinking" & "Web Search" Animation
         with st.chat_message("assistant"):
-            st.write(response)
+            status_container = st.empty()
+            
+            # Step 1: Thinking Stage
+            status_container.markdown("<div class='thinking-badge'>🧠 BioSync AI is analyzing query intent...</div>", unsafe_allow_html=True)
+            time.sleep(0.7)
+
+            # Step 2: Knowledge Base & Web Search Stage
+            status_container.markdown("<div class='thinking-badge'>🔍 Searching AgTech Knowledge Base & Web Telemetry...</div>", unsafe_allow_html=True)
+            time.sleep(0.8)
+
+            # Step 3: Clear Thinking Status and Stream Response
+            status_container.empty()
+            full_response = generate_ai_response(user_query)
+            
+            # Simulated Streaming Effect
+            response_box = st.empty()
+            partial_text = ""
+            for char in full_response:
+                partial_text += char
+                response_box.markdown(partial_text + "▌")
+                time.sleep(0.01)
+            
+            response_box.markdown(full_response)
+            st.session_state.chat_history.append({"role": "assistant", "content": full_response})
 
 # -----------------------------------------------------------------------------
 # MODULE 3: VISION 2057 (ROBOTIC FARMING ROADMAP)
@@ -437,9 +506,9 @@ elif menu == "📞 Request Enterprise Demo":
     with col_info:
         st.markdown("""
         ### Why BioSyncAI?
-        * **Global Scale:** 250+ enterprise clients across 103+ countries.
+        * **Global Scale:** Enterprise-grade agricultural platform.
         * **Decision Workflows:** Supply, Risk, Inspection, and Compliance.
-        * **Partner Direct:** `algorithmictitans113@gmail.com`
+        * **Lead Developer:** Lakshay (Class XI A)
         """)
 
     with col_form:
@@ -458,7 +527,7 @@ elif menu == "📞 Request Enterprise Demo":
                     st.info(f"""
                     📩 **Dispatched Confirmation Summary**
                     * **Email:** `{email}`
-                    * **Partner Contact:** `algorithmictitans113@gmail.com`
+                    * **Project Lead:** Lakshay (Class XI A)
                     """)
                 else:
                     st.error("Please fill in required fields.")
@@ -472,13 +541,11 @@ elif menu == "💼 Careers & Talent Hub":
     with st.expander("🚀 Open Roles", expanded=True):
         st.markdown("""
         #### 1. Robotics & Autonomous Hardware Engineer
-        * **Scope:** Design autonomous ground rovers for 2057 roadmap deployment.
-        * **Contact:** Send CV to `algorithmictitans113@gmail.com`
+        * **Scope:** Design autonomous ground rovers for Vision 2057 deployment.
         
         ---
         #### 2. Computer Vision AI Specialist
         * **Scope:** Multi-spectral leaf diagnostic model development.
-        * **Contact:** Send CV to `algorithmictitans113@gmail.com`
         """)
 
 # -----------------------------------------------------------------------------
@@ -489,8 +556,8 @@ elif menu == "📄 RFP Report Generator":
 
     report_text = """====================================================
 BIOSYNCAI ENTERPRISE AGRONOMIC REPORT
-Partner: ALGORITHMIC TITANS
-Contact: algorithmictitans113@gmail.com
+Developer: Lakshay (Class XI A)
+Project: OlympAI Hackathon 2026
 ====================================================
 
 Overall Health Status: Moderate Risk (Zone B Flagged)
@@ -505,13 +572,29 @@ RECOMMENDED ACTION PLAN:
     st.download_button("📥 Download Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
 
 # -----------------------------------------------------------------------------
-# MODULE 11: PARTNER & ACKNOWLEDGEMENTS
+# MODULE 11: ACKNOWLEDGEMENTS
 # -----------------------------------------------------------------------------
-elif menu == "ℹ️ Partner & Acknowledgements":
+elif menu == "📜 Acknowledgements":
+    st.markdown("<h1 style='color:#a3e635;'>Acknowledgements & Credits</h1>", unsafe_allow_html=True)
+
     st.markdown("""
-    <div class='partner-glow'>
-        <h3>🤝 Official Development Partner</h3>
-        <h2 style='color:#a3e635 !important; margin-top:0;'>ALGORITHMIC TITANS</h2>
-        <p><strong>Contact Email:</strong> <a href='mailto:algorithmictitans113@gmail.com' style='color:#a3e635;'>algorithmictitans113@gmail.com</a></p>
+    <div class='ack-glow'>
+        <h2 style='color:#a3e635 !important; margin-top:0;'>👨‍💻 Developed By</h2>
+        <h3 style='color:#ffffff; margin-bottom:15px;'>Lakshay</h3>
+        <p style='font-size:18px; color:#cbd5e1;'><strong>Class:</strong> XI A</p>
+        <p style='font-size:18px; color:#cbd5e1;'><strong>Project:</strong> BioSyncAI Autonomous AgTech Platform (OlympAI Hackathon 2026)</p>
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    with st.expander("🙏 Special Thanks & Gratitude", expanded=True):
+        st.markdown("""
+        ### **A Special Thanks to My Teacher**
+        I would like to express my sincere gratitude and heartfelt thanks to my respected teacher, **Ms. Nisha Yadav Mam**, for her constant encouragement, invaluable guidance, and unwavering support throughout the creation of this project. Her mentorship inspired me to push the boundaries of technology and build **BioSyncAI**.
+
+        ---
+
+        ### **Acknowledgement to My Teammates**
+        I am deeply grateful to all my teammates for their collaboration, enthusiasm, and tireless effort during the development of this project. Their teamwork and shared dedication played a crucial role in bringing the vision of an autonomous AgTech platform to life.
+        """)
