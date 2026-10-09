@@ -1,11 +1,14 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 from sklearn.ensemble import RandomForestClassifier
 
 # -----------------------------------------------------------------------------
-# 1. PAGE CONFIGURATION & COMPLETE FULL-SCREEN DARK THEME
+# 1. PAGE CONFIGURATION & ENTERPRISE DARK THEME
 # -----------------------------------------------------------------------------
 st.set_page_config(
     page_title="BioSyncAI | Enterprise Intelligence Platform",
@@ -14,28 +17,21 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Deep Dark Theme Injection across all parent containers, viewports, and text elements
+# Deep Dark Theme Override
 st.markdown("""
     <style>
-    /* Force overall application background */
     html, body, [data-testid="stAppViewContainer"], .stApp {
         background-color: #04080e !important;
         color: #f1f5f9 !important;
     }
-
-    /* Force Main Viewport & Block Containers */
     [data-testid="stMainBlockContainer"], .main, .block-container {
         background-color: #04080e !important;
         color: #f1f5f9 !important;
     }
-
-    /* Force Header & Toolbar Transparency */
     [data-testid="stHeader"], [data-testid="stToolbar"] {
         background-color: #04080e !important;
         color: #f1f5f9 !important;
     }
-
-    /* Sidebar Background & Borders */
     section[data-testid="stSidebar"] {
         background-color: #0d1520 !important;
         border-right: 1px solid #1e293b !important;
@@ -43,27 +39,19 @@ st.markdown("""
     section[data-testid="stSidebar"] * {
         color: #e2e8f0 !important;
     }
-
-    /* Cards, Metrics, Dataframes, and Expanders */
     .stMetric, div[data-testid="stExpander"], div[data-testid="stForm"] {
         background-color: #0d1520 !important;
         border: 1px solid #1e293b !important;
         border-radius: 8px !important;
     }
-
-    /* Input Controls, Selectboxes, and Text Areas */
     input, textarea, select, div[data-baseweb="select"] {
         background-color: #0d1520 !important;
         color: #f8fafc !important;
         border: 1px solid #334155 !important;
     }
-
-    /* Text & Headers Override */
     h1, h2, h3, h4, h5, h6, p, label, span {
         color: #f1f5f9 !important;
     }
-
-    /* Primary Accent Buttons (Cropin Lime Green) */
     .stButton>button {
         background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%) !important;
         color: #000000 !important;
@@ -78,8 +66,6 @@ st.markdown("""
         background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%) !important;
         color: #000000 !important;
     }
-
-    /* Custom Header & Partner Card Styling */
     .cropin-header {
         color: #84cc16 !important;
         font-size: 28px;
@@ -97,7 +83,47 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 2. MACHINE LEARNING DIAGNOSTIC MODEL
+# 2. REAL EMAIL DISPATCH FUNCTION
+# -----------------------------------------------------------------------------
+def send_real_email(recipient_email, recipient_name, domain_name, user_message):
+    try:
+        sender_email = st.secrets["SMTP_EMAIL"]
+        sender_password = st.secrets["SMTP_PASSWORD"]
+
+        msg = MIMEMultipart()
+        msg['From'] = f"BioSyncAI Enterprise <{sender_email}>"
+        msg['To'] = recipient_email
+        msg['Subject'] = "Confirmation - BioSyncAI Enterprise Consultation Request"
+
+        body = f"""Hello {recipient_name},
+
+Thank you for reaching out to BioSyncAI Enterprise!
+
+We have received your consultation request regarding the {domain_name} domain.
+Our team at ALGORITHMIC TITANS has logged your requirement:
+"{user_message if user_message else 'Enterprise AgTech Operations'}"
+
+A technical representative will get in touch with you shortly.
+
+Best regards,
+BioSyncAI Enterprise Team
+Partner: ALGORITHMIC TITANS
+Contact: lakshaybhagat242010@gmail.com
+"""
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        st.error(f"Email Dispatch Exception: {e}")
+        return False
+
+# -----------------------------------------------------------------------------
+# 3. MACHINE LEARNING DIAGNOSTIC MODEL
 # -----------------------------------------------------------------------------
 @st.cache_resource
 def train_biosync_model():
@@ -127,7 +153,7 @@ def train_biosync_model():
 model = train_biosync_model()
 
 # -----------------------------------------------------------------------------
-# 3. GLOBAL SIDEBAR NAVIGATION
+# 4. GLOBAL NAVIGATION
 # -----------------------------------------------------------------------------
 st.sidebar.markdown("<h2 style='color:#84cc16 !important;'>BioSyncAI Platform</h2>", unsafe_allow_html=True)
 st.sidebar.caption("Verified Intelligence for the Physical World")
@@ -149,7 +175,7 @@ st.sidebar.markdown("---")
 st.sidebar.info("📡 **BioSync Core:** Active\n🛰️ **Global Mesh:** 103+ Countries\n🧬 **Partner:** ALGORITHMIC TITANS")
 
 # -----------------------------------------------------------------------------
-# MODULE 1: TALK TO US (CROPIN COPYCAT SALES FUNNEL)
+# MODULE 1: TALK TO US (REQUEST DEMO & REAL EMAIL DISPATCH)
 # -----------------------------------------------------------------------------
 if menu == "📞 Talk to Us (Request Demo)":
     st.markdown("<div class='cropin-header'>Request a Conversation</div>", unsafe_allow_html=True)
@@ -166,7 +192,7 @@ if menu == "📞 Talk to Us (Request Demo)":
         
         ---
         #### Contact Direct:
-        * **Partner Email:** `algorithmictitans113@gmail.com`
+        * **Partner Email:** `lakshaybhagat242010@gmail.com`
         * **Global Support:** +1 202 555 0101
         """)
 
@@ -190,29 +216,19 @@ if menu == "📞 Talk to Us (Request Demo)":
 
             if submitted:
                 if f_name and l_name and email:
-                    st.success(f"✅ Thank you {f_name}! Your request has been recorded.")
-                    
-                    st.info(f"""
-                    📩 **Automated Message Dispatch Sent To:** `{email}`
-                    
-                    ---
-                    **From:** BioSyncAI Enterprise Team <algorithmictitans113@gmail.com>  
-                    **Subject:** Confirmation - BioSyncAI Enterprise Consultation Request  
-                    
-                    Dear {f_name} {l_name},
-                    
-                    Thank you for reaching out to BioSyncAI. We have received your inquiry for the **{domain}** domain ({industry}). 
-                    Our enterprise lead representative will review your requirements regarding:
-                    *"{decision_goals if decision_goals else 'Enterprise Operations'}"*
-                    
-                    We will get in touch with you shortly at {email} or {phone}.
-                    
-                    Best regards,  
-                    **BioSyncAI Enterprise Team**  
-                    Partner: ALGORITHMIC TITANS
-                    """)
+                    with st.spinner("Sending automated confirmation email..."):
+                        sent_success = send_real_email(
+                            recipient_email=email,
+                            recipient_name=f"{f_name} {l_name}",
+                            domain_name=domain,
+                            user_message=decision_goals
+                        )
+                    if sent_success:
+                        st.success(f"✅ Confirmation email sent successfully to `{email}`!")
+                    else:
+                        st.warning("Request recorded, but email dispatch failed. Ensure Streamlit Secrets are configured correctly.")
                 else:
-                    st.error("Please enter required fields: First Name, Last Name, and Work Email.")
+                    st.error("Please fill in required fields: First Name, Last Name, and Work Email.")
 
 # -----------------------------------------------------------------------------
 # MODULE 2: OPERATING DECISION & SPATIAL MATRIX
@@ -330,7 +346,7 @@ elif menu == "📄 Enterprise RFP & Report Export":
         report_text = """====================================================
 BIOSYNCAI ENTERPRISE AGRONOMIC REPORT
 Partner: ALGORITHMIC TITANS
-Contact: algorithmictitans113@gmail.com
+Contact: lakshaybhagat242010@gmail.com
 ====================================================
 
 Overall Health Status: Moderate Risk (Zone B Flagged)
@@ -354,7 +370,7 @@ elif menu == "ℹ️ Partner & Acknowledgements":
     <div class='partner-card'>
         <h3>🤝 Official Development Partner</h3>
         <h2 style='color:#84cc16 !important; margin-top:0;'>ALGORITHMIC TITANS</h2>
-        <p><strong>Contact Email:</strong> <a href='mailto:algorithmictitans113@gmail.com' style='color:#84cc16;'>algorithmictitans113@gmail.com</a></p>
+        <p><strong>Contact Email:</strong> <a href='mailto:lakshaybhagat242010@gmail.com' style='color:#84cc16;'>lakshaybhagat242010@gmail.com</a></p>
     </div>
     """, unsafe_allow_html=True)
 
