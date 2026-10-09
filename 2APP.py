@@ -111,7 +111,7 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Acknowledgement Card */
+    /* Creator Card */
     .ack-glow {
         background: linear-gradient(135deg, rgba(163, 230, 53, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%);
         border-left: 5px solid #a3e635;
@@ -205,9 +205,9 @@ model = train_biosync_model()
 def generate_ai_response(query):
     q_lower = query.lower()
     
-    # 1. Platform & Developer Specifics
+    # 1. Developer Specifics
     if "creator" in q_lower or "developer" in q_lower or "lakshay" in q_lower or "who made" in q_lower:
-        return ("**BioSyncAI** was created by **Lakshay of Class XI A** under the guidance of **Ms. Nisha Yadav Mam** for the **OlympAI Hackathon 2026**.\n\n"
+        return ("**BioSyncAI** was created by **Lakshay of Class XI A** along with team members for the **OlympAI Hackathon 2026**.\n\n"
                 "It represents an enterprise-grade, dark-themed AgTech platform designed to model global agricultural monitoring systems like Cropin.")
     
     # 2. Vision 2057 & Autonomous Robotics
@@ -241,10 +241,10 @@ def generate_ai_response(query):
         return ("**Modern AgTech** integrates IoT sensor telemetry, satellite remote sensing, computer vision, and machine learning. "
                 "By combining ground sensors with orbital imagery, farmers can transition from reactive farming to predictive precision agriculture.")
 
-    # 8. Fallback Smart Response
+    # 8. Fallback Response
     else:
         return (f"Thank you for asking about: *'{query}'*.\n\n"
-                "**BioSyncAI** provides real-time agricultural intelligence through its 11 integrated modules—including "
+                "**BioSyncAI** provides real-time agricultural intelligence through its integrated modules—including "
                 "Spatial Heatmaps, Multispectral Vision, Multimodal Machine Learning, and the **Vision 2057 Autonomous Farming Roadmap**. "
                 "Feel free to ask how any specific module works!")
 
@@ -267,12 +267,12 @@ menu = st.sidebar.radio(
         "📞 Request Enterprise Demo",
         "💼 Careers & Talent Hub",
         "📄 RFP Report Generator",
-        "📜 Acknowledgements"
+        "ℹ️ Created By & Team"
     ]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.info("👨‍💻 **Lead Developer:** Lakshay (Class XI A)\n🤖 **Robotic Swarm:** Vision 2057\n🏫 **OlympAI Hackathon 2026**")
+st.sidebar.info("👨‍💻 **Created By:** Lakshay (Class XI A)\n🤖 **Robotic Swarm:** Vision 2057\n🏫 **OlympAI Hackathon 2026**")
 
 # -----------------------------------------------------------------------------
 # MODULE 1: PLATFORM OVERVIEW
@@ -304,7 +304,7 @@ if menu == "🚀 Platform Overview":
         st.write("Fully automated sowing, weeding, and targeted intervention robotics.")
 
 # -----------------------------------------------------------------------------
-# MODULE 2: BIOSYNC AI TALK (ADVANCED ASSISTANT WITH THINKING STATUS)
+# MODULE 2: BIOSYNC AI TALK (ASSISTANT WITH THINKING STATUS)
 # -----------------------------------------------------------------------------
 elif menu == "💬 BioSync AI Talk (Assistant)":
     st.markdown("<h1 style='color:#a3e635;'>BioSync AI Talk Assistant</h1>", unsafe_allow_html=True)
@@ -315,7 +315,6 @@ elif menu == "💬 BioSync AI Talk (Assistant)":
             {"role": "assistant", "content": "Hello! I am BioSyncAI's intelligent assistant. How can I help you with agricultural technology, diagnostics, or site features today?"}
         ]
 
-    # Render Chat Messages
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -323,28 +322,22 @@ elif menu == "💬 BioSync AI Talk (Assistant)":
     user_query = st.chat_input("Type your message here (e.g., 'How does the AI model work?' or 'What is Vision 2057?')...")
 
     if user_query:
-        # Render User Message
         st.session_state.chat_history.append({"role": "user", "content": user_query})
         with st.chat_message("user"):
             st.write(user_query)
 
-        # Render Assistant Response with Live "Thinking" & "Web Search" Animation
         with st.chat_message("assistant"):
             status_container = st.empty()
             
-            # Step 1: Thinking Stage
             status_container.markdown("<div class='thinking-badge'>🧠 BioSync AI is analyzing query intent...</div>", unsafe_allow_html=True)
             time.sleep(0.7)
 
-            # Step 2: Knowledge Base & Web Search Stage
             status_container.markdown("<div class='thinking-badge'>🔍 Searching AgTech Knowledge Base & Web Telemetry...</div>", unsafe_allow_html=True)
             time.sleep(0.8)
 
-            # Step 3: Clear Thinking Status and Stream Response
             status_container.empty()
             full_response = generate_ai_response(user_query)
             
-            # Simulated Streaming Effect
             response_box = st.empty()
             partial_text = ""
             for char in full_response:
@@ -572,14 +565,14 @@ RECOMMENDED ACTION PLAN:
     st.download_button("📥 Download Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
 
 # -----------------------------------------------------------------------------
-# MODULE 11: ACKNOWLEDGEMENTS
+# MODULE 11: CREATED BY & TEAM
 # -----------------------------------------------------------------------------
-elif menu == "📜 Acknowledgements":
-    st.markdown("<h1 style='color:#a3e635;'>Acknowledgements & Credits</h1>", unsafe_allow_html=True)
+elif menu == "ℹ️ Created By & Team":
+    st.markdown("<h1 style='color:#a3e635;'>Project Credits</h1>", unsafe_allow_html=True)
 
     st.markdown("""
     <div class='ack-glow'>
-        <h2 style='color:#a3e635 !important; margin-top:0;'>👨‍💻 Developed By</h2>
+        <h2 style='color:#a3e635 !important; margin-top:0;'>👨‍💻 Created By</h2>
         <h3 style='color:#ffffff; margin-bottom:15px;'>Lakshay</h3>
         <p style='font-size:18px; color:#cbd5e1;'><strong>Class:</strong> XI A</p>
         <p style='font-size:18px; color:#cbd5e1;'><strong>Project:</strong> BioSyncAI Autonomous AgTech Platform (OlympAI Hackathon 2026)</p>
@@ -588,13 +581,8 @@ elif menu == "📜 Acknowledgements":
 
     st.markdown("---")
 
-    with st.expander("🙏 Special Thanks & Gratitude", expanded=True):
+    with st.expander("🤝 Team Collaboration", expanded=True):
         st.markdown("""
-        ### **A Special Thanks to My Teacher**
-        I would like to express my sincere gratitude and heartfelt thanks to my respected teacher, **Ms. Nisha Yadav Mam**, for her constant encouragement, invaluable guidance, and unwavering support throughout the creation of this project. Her mentorship inspired me to push the boundaries of technology and build **BioSyncAI**.
-
-        ---
-
         ### **Acknowledgement to My Teammates**
         I am deeply grateful to all my teammates for their collaboration, enthusiasm, and tireless effort during the development of this project. Their teamwork and shared dedication played a crucial role in bringing the vision of an autonomous AgTech platform to life.
         """)
