@@ -5,121 +5,161 @@ from PIL import Image, ImageEnhance, ImageFilter, ImageOps, ImageDraw
 from sklearn.ensemble import RandomForestClassifier
 
 # -----------------------------------------------------------------------------
-# 1. PAGE CONFIGURATION & ENTERPRISE DARK THEME
+# 1. PAGE CONFIGURATION & MODERN FUTURISTIC THEME
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="BioSyncAI | Enterprise Agricultural Intelligence",
+    page_title="BioSyncAI | Autonomous AgTech Platform",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Force Deep Enterprise Dark Mode (Cropin Aesthetic)
+# Futuristic Dark Theme with Glassmorphism, Modern Fonts & Neon Accents
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+
+    * {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }
+
+    /* Full-screen Dark Canvas */
     html, body, [data-testid="stAppViewContainer"], .stApp {
-        background-color: #04080e !important;
-        color: #f1f5f9 !important;
+        background: #030712 !important;
+        color: #f3f4f6 !important;
     }
+
     [data-testid="stMainBlockContainer"], .main, .block-container {
-        background-color: #04080e !important;
-        color: #f1f5f9 !important;
+        background: #030712 !important;
+        padding-top: 2rem !important;
     }
+
     [data-testid="stHeader"], [data-testid="stToolbar"] {
-        background-color: #04080e !important;
-        color: #f1f5f9 !important;
+        background: transparent !important;
     }
+
+    /* Glassmorphism Sidebar */
     section[data-testid="stSidebar"] {
-        background-color: #0d1520 !important;
-        border-right: 1px solid #1e293b !important;
+        background: rgba(15, 23, 42, 0.75) !important;
+        backdrop-filter: blur(16px) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
-    section[data-testid="stSidebar"] * {
-        color: #e2e8f0 !important;
+
+    /* Modern Glass Cards & Metrics */
+    .stMetric, div[data-testid="stExpander"], div[data-testid="stForm"], .futuristic-card {
+        background: rgba(17, 24, 39, 0.7) !important;
+        backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        padding: 20px !important;
+        margin-bottom: 20px !important;
     }
-    .stMetric, div[data-testid="stExpander"], div[data-testid="stForm"] {
-        background-color: #0d1520 !important;
-        border: 1px solid #1e293b !important;
-        border-radius: 8px !important;
+
+    /* Glowing Metric Values */
+    [data-testid="stMetricValue"] {
+        color: #a3e635 !important;
+        font-weight: 800 !important;
+        text-shadow: 0 0 12px rgba(163, 230, 53, 0.3);
     }
+
+    /* Futuristic Input Form Controls */
     input, textarea, select, div[data-baseweb="select"] {
-        background-color: #0d1520 !important;
-        color: #f8fafc !important;
-        border: 1px solid #334155 !important;
+        background: rgba(31, 41, 55, 0.6) !important;
+        color: #f9fafb !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 10px !important;
     }
-    h1, h2, h3, h4, h5, h6, p, label, span {
-        color: #f1f5f9 !important;
-    }
+
+    /* High-Gloss Modern Neon Button */
     .stButton>button {
-        background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%) !important;
-        color: #000000 !important;
+        background: linear-gradient(135deg, #a3e635 0%, #65a30d 100%) !important;
+        color: #052e16 !important;
         border: none !important;
-        border-radius: 6px !important;
-        font-weight: bold !important;
+        border-radius: 12px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.5px;
         width: 100% !important;
-        height: 48px !important;
+        height: 52px !important;
         font-size: 16px !important;
+        box-shadow: 0 4px 20px rgba(163, 230, 53, 0.35) !important;
+        transition: all 0.3s ease !important;
     }
     .stButton>button:hover {
-        background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%) !important;
-        color: #000000 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 28px rgba(163, 230, 53, 0.55) !important;
     }
-    .cropin-header {
-        color: #84cc16 !important;
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 10px;
+
+    /* Modern Hero Banner */
+    .hero-banner-modern {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(3, 7, 18, 0.9) 100%), 
+                    radial-gradient(circle at top right, rgba(163, 230, 53, 0.15), transparent 50%);
+        border: 1px solid rgba(163, 230, 53, 0.2);
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
-    .partner-card {
-        background-color: #0d1520;
-        border-left: 4px solid #84cc16;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 15px;
+
+    .hero-title {
+        font-size: 42px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #ffffff 0%, #a3e635 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 12px;
     }
-    .hero-banner {
-        background: linear-gradient(180deg, #0d1520 0%, #04080e 100%);
-        border: 1px solid #1e293b;
-        padding: 30px;
+
+    /* Partner Badge */
+    .partner-glow {
+        background: linear-gradient(90deg, rgba(163, 230, 53, 0.1) 0%, rgba(101, 163, 13, 0.05) 100%);
+        border-left: 4px solid #a3e635;
+        padding: 24px;
         border-radius: 12px;
-        margin-bottom: 25px;
+        margin-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 2. IMAGE GENERATION UTILITIES
+# 2. FUTURISTIC SYNTHETIC IMAGE GENERATOR
 # -----------------------------------------------------------------------------
-def generate_synthetic_image(image_type="leaf"):
-    img = Image.new('RGB', (500, 350), color=(13, 21, 32))
+def generate_futuristic_image(mode="robotics"):
+    img = Image.new('RGB', (600, 380), color=(11, 18, 32))
     draw = ImageDraw.Draw(img)
     
-    if image_type == "leaf":
-        draw.ellipse([100, 40, 400, 310], fill=(34, 139, 34), outline=(132, 204, 22), width=2)
-        draw.line([250, 40, 250, 310], fill=(132, 204, 22), width=3)
-        draw.line([250, 120, 170, 70], fill=(132, 204, 22), width=2)
-        draw.line([250, 180, 330, 130], fill=(132, 204, 22), width=2)
-        draw.line([250, 240, 160, 200], fill=(132, 204, 22), width=2)
-        draw.ellipse([180, 150, 220, 190], fill=(139, 69, 19))
-        draw.ellipse([270, 210, 300, 240], fill=(139, 69, 19))
-    elif image_type == "satellite":
-        for i in range(0, 500, 50):
-            draw.line([i, 0, i, 350], fill=(30, 41, 59), width=1)
-        for j in range(0, 350, 50):
-            draw.line([0, j, 500, j], fill=(30, 41, 59), width=1)
-        draw.rectangle([100, 50, 250, 200], fill=(34, 197, 94, 100), outline=(132, 204, 22), width=2)
-        draw.rectangle([250, 50, 400, 200], fill=(239, 68, 68, 100), outline=(239, 68, 68), width=2)
-        draw.rectangle([100, 200, 400, 300], fill=(234, 179, 8, 100), outline=(234, 179, 8), width=2)
-    elif image_type == "supply":
-        draw.rectangle([50, 100, 150, 250], fill=(30, 58, 138), outline=(59, 130, 246), width=2)
-        draw.line([150, 175, 250, 175], fill=(132, 204, 22), width=3)
-        draw.rectangle([250, 100, 350, 250], fill=(15, 118, 110), outline=(20, 184, 166), width=2)
-        draw.line([350, 175, 420, 175], fill=(132, 204, 22), width=3)
-        draw.ellipse([420, 145, 470, 205], fill=(180, 83, 9), outline=(245, 158, 11), width=2)
+    if mode == "robotics":
+        # Draw Autonomous Farmer Robot Concept
+        draw.rectangle([200, 140, 400, 280], fill=(24, 35, 54), outline=(163, 230, 53), width=2)
+        draw.ellipse([270, 80, 330, 140], fill=(30, 41, 59), outline=(163, 230, 53), width=2)
+        # Glowing Laser Eyes
+        draw.ellipse([285, 100, 295, 110], fill=(163, 230, 53))
+        draw.ellipse([305, 100, 315, 110], fill=(163, 230, 53))
+        # Robotic Arms
+        draw.line([200, 180, 120, 240], fill=(163, 230, 53), width=4)
+        draw.line([400, 180, 480, 240], fill=(163, 230, 53), width=4)
+        # All-Terrain Rover Wheels
+        draw.ellipse([160, 250, 230, 320], fill=(15, 23, 42), outline=(163, 230, 53), width=3)
+        draw.ellipse([370, 250, 440, 320], fill=(15, 23, 42), outline=(163, 230, 53), width=3)
+    
+    elif mode == "satellite":
+        for i in range(0, 600, 40):
+            draw.line([i, 0, i, 380], fill=(31, 41, 55), width=1)
+        for j in range(0, 380, 40):
+            draw.line([0, j, 600, j], fill=(31, 41, 55), width=1)
+        draw.polygon([(100, 60), (300, 40), (500, 120), (450, 320), (150, 300)], fill=(20, 83, 45, 180), outline=(163, 230, 53), width=2)
+        draw.ellipse([250, 140, 350, 240], fill=(185, 28, 28, 150), outline=(239, 68, 68), width=2)
+
+    elif mode == "leaf":
+        draw.ellipse([120, 40, 480, 340], fill=(20, 83, 45), outline=(163, 230, 53), width=2)
+        draw.line([300, 40, 300, 340], fill=(163, 230, 53), width=3)
+        draw.ellipse([220, 140, 280, 200], fill=(180, 83, 9))
+        draw.ellipse([320, 220, 370, 270], fill=(180, 83, 9))
 
     return img
 
 # -----------------------------------------------------------------------------
-# 3. MACHINE LEARNING DIAGNOSTIC MODEL
+# 3. MACHINE LEARNING MODEL
 # -----------------------------------------------------------------------------
 @st.cache_resource
 def train_biosync_model():
@@ -149,96 +189,104 @@ def train_biosync_model():
 model = train_biosync_model()
 
 # -----------------------------------------------------------------------------
-# 4. GLOBAL SIDEBAR NAVIGATION
+# 4. SIDEBAR NAVIGATION
 # -----------------------------------------------------------------------------
-st.sidebar.markdown("<h2 style='color:#84cc16 !important;'>BioSyncAI Platform</h2>", unsafe_allow_html=True)
-st.sidebar.caption("Verified Intelligence for the Physical World")
+st.sidebar.markdown("<h2 style='color:#a3e635 !important; font-weight:800;'>BioSyncAI Core</h2>", unsafe_allow_html=True)
+st.sidebar.caption("⚡ Autonomous AgTech & Robotic Mesh")
 
 menu = st.sidebar.radio(
-    "Navigation Hierarchy",
+    "Navigation System",
     [
-        "🏠 Platform Overview & Introduction",
-        "🌐 Operating Decision & Spatial Matrix",
-        "🔬 Multispectral Vision Diagnostics",
-        "🤖 Multimodal AI Engine",
-        "🚚 Supply Chain Traceability & EUDR",
-        "📊 Yield Outlook & Irrigation",
-        "🌱 ESG & Carbon Footprint Analytics",
-        "📞 Talk to Us (Request Demo)",
-        "💼 Enterprise Careers & Talent",
-        "📄 Enterprise RFP & Report Export",
+        "🚀 Platform Overview",
+        "🤖 Vision 2057: Robotic Farming",
+        "🌐 Spatial Health Heatmap",
+        "🔬 Multispectral Vision Engine",
+        "🧠 Multimodal AI Diagnostic",
+        "📊 Yield Outlook & Water Grid",
+        "📞 Request Enterprise Demo",
+        "💼 Careers & Talent Hub",
+        "📄 RFP Report Generator",
         "ℹ️ Partner & Acknowledgements"
     ]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.info("📡 **BioSync Core:** Active\n🛰️ **Global Mesh:** 103+ Countries\n🧬 **Partner:** ALGORITHMIC TITANS")
+st.sidebar.info("📡 **Autonomous Mesh:** Active\n🤖 **Robotic Swarm:** 2057 Roadmap\n🧬 **Partner:** ALGORITHMIC TITANS")
 
 # -----------------------------------------------------------------------------
-# MODULE 1: PLATFORM OVERVIEW & INTRODUCTION
+# MODULE 1: PLATFORM OVERVIEW
 # -----------------------------------------------------------------------------
-if menu == "🏠 Platform Overview & Introduction":
-    st.markdown("<div class='cropin-header'>BioSyncAI Cloud & Intelligence Engine</div>", unsafe_allow_html=True)
-    
+if menu == "🚀 Platform Overview":
     st.markdown("""
-    <div class='hero-banner'>
-        <h2>Building Intelligence for the Physical World</h2>
-        <p style='font-size: 16px; color: #94a3b8;'>
-            BioSyncAI connects agribusinesses, financial institutions, and development agencies to real-time ground telemetry, orbital remote sensing, and predictive machine learning models across one billion acres.
+    <div class='hero-banner-modern'>
+        <div class='hero-title'>BioSyncAI Enterprise Platform</div>
+        <p style='font-size: 18px; color: #cbd5e1; line-height: 1.6;'>
+            Next-generation agricultural intelligence powering autonomous operations, orbital field analytics, and predictive AI decision frameworks.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.image(generate_synthetic_image("satellite"), caption="Orbital Telemetry & Field Parceling", use_container_width=True)
-        st.subheader("Orbital Risk Grid")
-        st.write("Real-time plot monitoring combining thermal, SAR, and optical satellite feeds.")
+        st.image(generate_futuristic_image("satellite"), caption="Orbital Telemetry Grid", use_container_width=True)
+        st.subheader("Orbital Surveillance")
+        st.write("Hyperspectral and thermal satellite telemetry mapped continuously.")
 
     with c2:
-        st.image(generate_synthetic_image("leaf"), caption="Multispectral Crop Health Diagnostics", use_container_width=True)
-        st.subheader("Multispectral Diagnostics")
-        st.write("Computer vision models analyzing leaf cellular stress and fungal infections.")
+        st.image(generate_futuristic_image("leaf"), caption="Multispectral Cellular Vision", use_container_width=True)
+        st.subheader("Cellular Diagnostics")
+        st.write("Real-time detection of crop stress and pathogens using computer vision.")
 
     with c3:
-        st.image(generate_synthetic_image("supply"), caption="End-to-End Supply Traceability", use_container_width=True)
-        st.subheader("Supply Traceability")
-        st.write("Full compliance tracking across global supply chains from plot to processing.")
+        st.image(generate_futuristic_image("robotics"), caption="Autonomous Farm Robotics", use_container_width=True)
+        st.subheader("Robotic Swarms")
+        st.write("Fully automated sowing, weeding, and targeted intervention robotics.")
+
+# -----------------------------------------------------------------------------
+# MODULE 2: VISION 2057 (ROBOTIC FARMING ROADMAP)
+# -----------------------------------------------------------------------------
+elif menu == "🤖 Vision 2057: Robotic Farming":
+    st.markdown("<h1 style='color:#a3e635;'>Vision 2057: The Autonomous Robotic Era</h1>", unsafe_allow_html=True)
+    st.write("Our long-term global roadmap towards 100% autonomous, robotically managed agriculture by the year 2057.")
+
+    st.image(generate_futuristic_image("robotics"), caption="BioSyncAI Autonomous Field Robot (Concept 2057)", use_container_width=True)
+
+    r1, r2, r3 = st.columns(3)
+    with r1:
+        st.metric("Global Swarm Target", "10,000,000 Units", "By 2057")
+    with r2:
+        st.metric("Human Labor Requirement", "0.0%", "-100% Manual Effort")
+    with r3:
+        st.metric("Precision Yield Efficiency", "99.8%", "+45% Output")
 
     st.markdown("---")
-    
-    with st.expander("📌 Platform Core Pillars", expanded=True):
-        col_a, col_b = st.columns(2)
-        with col_a:
-            st.markdown("""
-            ### Key Capabilities
-            * **Global Scale:** Monitoring 103+ countries with 250+ enterprise integrations.
-            * **Data Integration:** IoT soil sensors, bio-acoustic resonance, and satellite imagery.
-            * **Prescriptive AI:** Real-time intervention advisories for disease and stress mitigation.
-            """)
-        with col_b:
-            st.markdown("""
-            ### Impact Metrics
-            * **Yield Improvement:** Up to +18% increase in farm productivity.
-            * **Resource Optimization:** -25% reduction in irrigation water usage.
-            * **Risk Prevention:** 92.4% accuracy in early fungal blight detection.
-            """)
+
+    with st.expander("🗺️ Strategic Roadmap to 2057", expanded=True):
+        st.markdown("""
+        #### **Phase 1: Diagnostic AI & Cloud Analytics (2026 – 2035)**
+        * Rollout of satellite spatial heatmaps, multi-modal disease prediction, and remote sensor integration.
+        
+        #### **Phase 2: Hybrid Human-Drone Operations (2035 – 2045)**
+        * Autonomous drone swarms for precision aerial spraying, thermal imaging, and automated soil sampling.
+        
+        #### **Phase 3: Full Robotic Autonomy (2045 – 2057)**
+        * Solar-powered autonomous field robots handling micro-seeding, continuous mechanical weeding, and zero-chemical precision harvesting worldwide.
+        """)
 
 # -----------------------------------------------------------------------------
-# MODULE 2: OPERATING DECISION & SPATIAL MATRIX
+# MODULE 3: SPATIAL HEALTH HEATMAP
 # -----------------------------------------------------------------------------
-elif menu == "🌐 Operating Decision & Spatial Matrix":
-    st.markdown("<div class='cropin-header'>Operating Decision & Spatial Risk Matrix</div>", unsafe_allow_html=True)
-    
-    with st.expander("📌 Grid Configuration & Sector Metrics", expanded=True):
+elif menu == "🌐 Spatial Health Heatmap":
+    st.markdown("<h1 style='color:#a3e635;'>Operating Decision & Spatial Matrix</h1>", unsafe_allow_html=True)
+
+    with st.expander("📌 Real-time Sector Metrics", expanded=True):
         m1, m2, m3, m4 = st.columns(4)
         m1.metric("Monitored Area", "12,450 Acres", "+350 Acres")
         m2.metric("Health Index", "84.2 / 100", "-2.1 pts")
-        m3.metric("Disease Risk Flag", "High Risk", "Zone B")
+        m3.metric("Disease Flag", "High Risk", "Zone B")
         m4.metric("Soil Saturation", "78%", "Optimal")
 
-    with st.expander("🗺️ Interactive Spatial Heatmap", expanded=True):
-        st.image(generate_synthetic_image("satellite"), caption="Active Satellite Field Map", use_container_width=True)
+    with st.expander("🗺️ Interactive Spatial Matrix", expanded=True):
         grid_dim = st.slider("Resolution Grid Size", 5, 20, 10)
         sm_range = np.linspace(30, 90, grid_dim)
         hum_range = np.linspace(40, 95, grid_dim)
@@ -258,29 +306,28 @@ elif menu == "🌐 Operating Decision & Spatial Matrix":
         st.dataframe(df_grid, use_container_width=True, height=340)
 
 # -----------------------------------------------------------------------------
-# MODULE 3: MULTISPECTRAL VISION DIAGNOSTICS
+# MODULE 4: MULTISPECTRAL VISION ENGINE
 # -----------------------------------------------------------------------------
-elif menu == "🔬 Multispectral Vision Diagnostics":
-    st.markdown("<div class='cropin-header'>Multispectral Vision Engine</div>", unsafe_allow_html=True)
-    
-    with st.expander("📷 Leaf Sample Analysis & Processing Channel", expanded=True):
+elif menu == "🔬 Multispectral Vision Engine":
+    st.markdown("<h1 style='color:#a3e635;'>Multispectral Vision Engine</h1>", unsafe_allow_html=True)
+
+    with st.expander("📷 Leaf Sample Analysis", expanded=True):
         uploaded_file = st.file_uploader("Upload Crop Sample (JPG/PNG)", type=["jpg", "png", "jpeg"])
 
         if uploaded_file is not None:
             image = Image.open(uploaded_file).convert("RGB")
         else:
-            st.caption("⚡ Showing synthetic leaf sample for demonstration.")
-            image = generate_synthetic_image("leaf")
+            st.caption("⚡ Showing synthetic leaf sample image.")
+            image = generate_futuristic_image("leaf")
 
         c1, c2 = st.columns(2)
-
         with c1:
-            st.subheader("Original RGB View")
+            st.subheader("RGB Spectrum")
             st.image(image, use_container_width=True)
 
         with c2:
-            st.subheader("Spectral Processing Channel")
-            vision_mode = st.selectbox("Select Filter Channel", ["Chlorophyll Index (Pseudo-NDVI)", "Lesion Edge Tracer", "Thermal Anomaly Map"])
+            st.subheader("Processed Spectral Filter")
+            vision_mode = st.selectbox("Select Filter", ["Chlorophyll Index (Pseudo-NDVI)", "Lesion Edge Tracer", "Thermal Anomaly Map"])
 
             if vision_mode == "Chlorophyll Index (Pseudo-NDVI)":
                 r, g, b = image.split()
@@ -295,12 +342,12 @@ elif menu == "🔬 Multispectral Vision Diagnostics":
             st.image(processed_image, caption=f"Active Filter: {vision_mode}", use_container_width=True)
 
 # -----------------------------------------------------------------------------
-# MODULE 4: MULTIMODAL AI ENGINE
+# MODULE 5: MULTIMODAL AI DIAGNOSTIC
 # -----------------------------------------------------------------------------
-elif menu == "🤖 Multimodal AI Engine":
-    st.markdown("<div class='cropin-header'>Multimodal AI Inference Engine</div>", unsafe_allow_html=True)
+elif menu == "🧠 Multimodal AI Diagnostic":
+    st.markdown("<h1 style='color:#a3e635;'>Multimodal AI Inference Engine</h1>", unsafe_allow_html=True)
 
-    with st.expander("🎛️ Microclimate & Bio-Acoustic Inputs", expanded=True):
+    with st.expander("🎛️ Sensor Input Controls", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
             in_sm = st.slider("Soil Moisture (%)", 0.0, 100.0, 82.0)
@@ -310,7 +357,7 @@ elif menu == "🤖 Multimodal AI Engine":
             in_rain = st.slider("Precipitation (mm)", 0.0, 100.0, 12.5)
             in_freq = st.slider("Bio-Resonance Frequency (Hz)", 300, 900, 520)
 
-        if st.button("🚀 Run Live AI Inference"):
+        if st.button("🚀 Run AI Inference"):
             feat = np.array([[in_sm, in_temp, in_hum, in_rain, in_freq]])
             pred = model.predict(feat)[0]
             prob = model.predict_proba(feat)[0]
@@ -321,158 +368,82 @@ elif menu == "🤖 Multimodal AI Engine":
                 st.success(f"✅ **HEALTHY FIELD STATUS**\n*Confidence:* `{prob[0]*100:.2f}%`")
 
 # -----------------------------------------------------------------------------
-# MODULE 5: SUPPLY CHAIN TRACEABILITY & EUDR
+# MODULE 6: YIELD OUTLOOK & WATER GRID
 # -----------------------------------------------------------------------------
-elif menu == "🚚 Supply Chain Traceability & EUDR":
-    st.markdown("<div class='cropin-header'>Supply Chain Traceability & Deforestation Compliance</div>", unsafe_allow_html=True)
+elif menu == "📊 Yield Outlook & Water Grid":
+    st.markdown("<h1 style='color:#a3e635;'>Harvest Forecast & Irrigation</h1>", unsafe_allow_html=True)
 
-    with st.expander("📦 Supply Chain Pipeline & Verification", expanded=True):
-        st.image(generate_synthetic_image("supply"), caption="Supply Traceability Verification Pipeline", use_container_width=True)
-        
-        col_s1, col_s2 = st.columns(2)
-        with col_s1:
-            st.markdown("""
-            ### Batch Tracking
-            * **Batch ID:** `BATCH-2057-WHEAT-884`
-            * **Origin Field:** Sector Alpha-01
-            * **Certification:** EUDR Compliant (Zero Deforestation)
-            * **GPS Polygon:** Verification Active
-            """)
-        with col_s2:
-            st.markdown("""
-            ### Verification Log
-            * **Harvest Timestamp:** 2026-10-08
-            * **Processor Check:** Passed
-            * **Carbon Footprint / Ton:** 142 kg CO2e
-            * **Quality Score:** Grade A Export
-            """)
-
-# -----------------------------------------------------------------------------
-# MODULE 6: YIELD OUTLOOK & IRRIGATION
-# -----------------------------------------------------------------------------
-elif menu == "📊 Yield Outlook & Irrigation":
-    st.markdown("<div class='cropin-header'>Harvest Yield & Irrigation Analytics</div>", unsafe_allow_html=True)
-    
-    with st.expander("🌾 Crop Yield Forecast & Water Controller", expanded=True):
+    with st.expander("🌾 Yield Outlook", expanded=True):
         c1, c2 = st.columns(2)
         with c1:
-            st.metric("Estimated Yield", "4.25 Tons / Hectare", "+8.2%")
+            st.metric("Estimated Harvest", "4.25 Tons / Ha", "+8.2%")
             st.line_chart(pd.DataFrame({'Yield': [3.8, 3.9, 4.0, 4.1, 4.25]}))
         with c2:
-            st.metric("Soil Moisture Index", "78%", "Slightly Elevated")
+            st.metric("Water Saturation", "78%", "Optimal")
             st.progress(0.78)
 
 # -----------------------------------------------------------------------------
-# MODULE 7: ESG & CARBON FOOTPRINT ANALYTICS
+# MODULE 7: REQUEST ENTERPRISE DEMO
 # -----------------------------------------------------------------------------
-elif menu == "🌱 ESG & Carbon Footprint Analytics":
-    st.markdown("<div class='cropin-header'>ESG & Sustainability Intelligence</div>", unsafe_allow_html=True)
-
-    with st.expander("📉 Environmental Metrics & Carbon Credit Forecasting", expanded=True):
-        e1, e2, e3 = st.columns(3)
-        e1.metric("Carbon Sequestration", "3.2 Tons CO2e / Ha", "+12%")
-        e2.metric("Water Savings Index", "24.5%", "-5.2% Consumption")
-        e3.metric("Soil Biodiversity Score", "88 / 100", "High Vitality")
-
-        st.subheader("Seasonal Carbon Sequestration Trajectory")
-        esg_df = pd.DataFrame({
-            'Month': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            'CO2 Sequestered (Tons)': [1.1, 1.4, 1.8, 2.2, 2.8, 3.2]
-        })
-        st.bar_chart(esg_df.set_index('Month'))
-
-# -----------------------------------------------------------------------------
-# MODULE 8: TALK TO US (REQUEST DEMO)
-# -----------------------------------------------------------------------------
-elif menu == "📞 Talk to Us (Request Demo)":
-    st.markdown("<div class='cropin-header'>Request a Conversation</div>", unsafe_allow_html=True)
-    st.write("Built for consequential decisions. Combine deep domain expertise with enterprise technology and global deployment experience.")
+elif menu == "📞 Request Enterprise Demo":
+    st.markdown("<h1 style='color:#a3e635;'>Talk to Our Enterprise Team</h1>", unsafe_allow_html=True)
 
     col_info, col_form = st.columns([1, 1])
 
     with col_info:
         st.markdown("""
         ### Why BioSyncAI?
-        * **01 | Global Scale:** 250+ enterprise clients across 103+ countries.
-        * **02 | Operating Decisions:** Supply, Risk, Inspection, and Compliance workflows.
-        * **03 | Enterprise Context:** Intelligence computed across one billion acres.
-        
-        ---
-        #### Contact Direct:
-        * **Partner Email:** `algorithmictitans113@gmail.com`
+        * **Global Scale:** 250+ enterprise clients across 103+ countries.
+        * **Decision Workflows:** Supply, Risk, Inspection, and Compliance.
+        * **Partner Direct:** `algorithmictitans113@gmail.com`
         """)
 
     with col_form:
-        with st.form("cropin_lead_form"):
-            st.subheader("Talk to Our Enterprise Team")
-            
+        with st.form("demo_form"):
             f_name = st.text_input("First Name *")
             l_name = st.text_input("Last Name *")
             email = st.text_input("Work Email *")
-            
-            job_role = st.selectbox("Job Role", ["Select your role", "Agronomist / Farm Manager", "Enterprise Executive", "Supply Chain Lead", "Government Official", "Researcher"])
-            domain = st.selectbox("Domain", ["Select your domain", "Food-Ag", "Forest", "Water", "Energy", "Infrastructure", "Banking & Insurance"])
-            industry = st.selectbox("Industry", ["Select your industry", "Farming & Crop Production", "Agrochemicals & Seeds", "Food Processing", "Government & NGO"])
-            region = st.selectbox("Region", ["Select your region", "North America", "Asia Pacific (India)", "Europe", "Latin America", "Middle East & Africa"])
-            
+            domain = st.selectbox("Domain", ["Food-Ag", "Forest", "Water", "Energy", "Infrastructure"])
             decision_goals = st.text_area("What decision are you trying to improve?")
-            
+
             submitted = st.form_submit_button("Submit Request")
 
             if submitted:
                 if f_name and l_name and email:
-                    st.success(f"✅ Thank you {f_name}! Your request has been recorded successfully.")
+                    st.success(f"✅ Thank you {f_name}! Request logged successfully.")
                     st.info(f"""
-                    📩 **Enterprise Dispatch Summary**
-                    
-                    * **Recipient:** `{email}`
-                    * **Partner Email:** `algorithmictitans113@gmail.com`
-                    * **Domain Selected:** {domain}
-                    * **Decision Goals:** {decision_goals if decision_goals else 'Enterprise AgTech Operations'}
-                    
-                    An automated representative from **ALGORITHMIC TITANS** will process your request.
+                    📩 **Dispatched Confirmation Summary**
+                    * **Email:** `{email}`
+                    * **Partner Contact:** `algorithmictitans113@gmail.com`
                     """)
                 else:
-                    st.error("Please fill in required fields: First Name, Last Name, and Work Email.")
+                    st.error("Please fill in required fields.")
 
 # -----------------------------------------------------------------------------
-# MODULE 9: ENTERPRISE CAREERS & TALENT
+# MODULE 8: CAREERS & TALENT HUB
 # -----------------------------------------------------------------------------
-elif menu == "💼 Enterprise Careers & Talent":
-    st.markdown("<div class='cropin-header'>Careers at BioSyncAI</div>", unsafe_allow_html=True)
-    st.write("Join us in building the intelligence layer for global agriculture and climate resilience.")
+elif menu == "💼 Careers & Talent Hub":
+    st.markdown("<h1 style='color:#a3e635;'>Careers at BioSyncAI</h1>", unsafe_allow_html=True)
 
-    with st.expander("🚀 Open Positions", expanded=True):
-        st.subheader("Current Job Openings")
+    with st.expander("🚀 Open Roles", expanded=True):
+        st.markdown("""
+        #### 1. Robotics & Autonomous Hardware Engineer
+        * **Scope:** Design autonomous ground rovers for 2057 roadmap deployment.
+        * **Contact:** Send CV to `algorithmictitans113@gmail.com`
         
-        st.markdown("""
-        #### 1. Senior AI/ML Engineer - Computer Vision
-        * **Location:** Remote / Hybrid
-        * **Domain:** Deep Learning for Satellite & Drone Imagery Analysis
-        * **Stack:** PyTorch, OpenCV, Geospatial Raster Processing
+        ---
+        #### 2. Computer Vision AI Specialist
+        * **Scope:** Multi-spectral leaf diagnostic model development.
+        * **Contact:** Send CV to `algorithmictitans113@gmail.com`
         """)
-        if st.button("Apply for Computer Vision Role"):
-            st.success("Application form initialized. Send your CV to algorithmictitans113@gmail.com")
-
-        st.markdown("---")
-
-        st.markdown("""
-        #### 2. Enterprise Solutions Architect
-        * **Location:** Global / Remote
-        * **Domain:** Agribusiness ERP Integrations & IoT Telemetry
-        * **Stack:** Streamlit, Python, REST APIs, Geospatial Databases
-        """)
-        if st.button("Apply for Solutions Architect Role"):
-            st.success("Application form initialized. Send your CV to algorithmictitans113@gmail.com")
 
 # -----------------------------------------------------------------------------
-# MODULE 10: ENTERPRISE RFP & REPORT EXPORT
+# MODULE 9: RFP REPORT GENERATOR
 # -----------------------------------------------------------------------------
-elif menu == "📄 Enterprise RFP & Report Export":
-    st.markdown("<div class='cropin-header'>Enterprise RFP & Agronomic Report</div>", unsafe_allow_html=True)
-    
-    with st.expander("📝 Generate Automated Report", expanded=True):
-        report_text = """====================================================
+elif menu == "📄 RFP Report Generator":
+    st.markdown("<h1 style='color:#a3e635;'>Enterprise RFP & Agronomic Export</h1>", unsafe_allow_html=True)
+
+    report_text = """====================================================
 BIOSYNCAI ENTERPRISE AGRONOMIC REPORT
 Partner: ALGORITHMIC TITANS
 Contact: algorithmictitans113@gmail.com
@@ -486,26 +457,17 @@ RECOMMENDED ACTION PLAN:
 1. Apply targeted copper-based fungicide to Zone B.
 2. Reduce micro-irrigation flow in Zone B by 20%.
 ===================================================="""
-        st.text_area("Report Content", report_text, height=200)
-        st.download_button("📥 Download Agronomic Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
+    st.text_area("Report Output", report_text, height=200)
+    st.download_button("📥 Download Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
 
 # -----------------------------------------------------------------------------
-# MODULE 11: PARTNER & ACKNOWLEDGEMENTS
+# MODULE 10: PARTNER & ACKNOWLEDGEMENTS
 # -----------------------------------------------------------------------------
 elif menu == "ℹ️ Partner & Acknowledgements":
-    st.markdown("<div class='cropin-header'>Partner Information & Contact</div>", unsafe_allow_html=True)
-
     st.markdown("""
-    <div class='partner-card'>
+    <div class='partner-glow'>
         <h3>🤝 Official Development Partner</h3>
-        <h2 style='color:#84cc16 !important; margin-top:0;'>ALGORITHMIC TITANS</h2>
-        <p><strong>Contact Email:</strong> <a href='mailto:algorithmictitans113@gmail.com' style='color:#84cc16;'>algorithmictitans113@gmail.com</a></p>
+        <h2 style='color:#a3e635 !important; margin-top:0;'>ALGORITHMIC TITANS</h2>
+        <p><strong>Contact Email:</strong> <a href='mailto:algorithmictitans113@gmail.com' style='color:#a3e635;'>algorithmictitans113@gmail.com</a></p>
     </div>
     """, unsafe_allow_html=True)
-
-    with st.expander("ℹ️ Project & Platform Details", expanded=True):
-        st.markdown("""
-        * **Platform Name:** BioSyncAI Enterprise Platform
-        * **Core Technology:** Multimodal Machine Learning & Multispectral Computer Vision
-        * **Domain:** Agricultural Intelligence & Climate Resilience
-        """)
