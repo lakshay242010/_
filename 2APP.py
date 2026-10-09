@@ -129,16 +129,12 @@ def generate_futuristic_image(mode="robotics"):
     draw = ImageDraw.Draw(img)
     
     if mode == "robotics":
-        # Draw Autonomous Farmer Robot Concept
         draw.rectangle([200, 140, 400, 280], fill=(24, 35, 54), outline=(163, 230, 53), width=2)
         draw.ellipse([270, 80, 330, 140], fill=(30, 41, 59), outline=(163, 230, 53), width=2)
-        # Glowing Laser Eyes
         draw.ellipse([285, 100, 295, 110], fill=(163, 230, 53))
         draw.ellipse([305, 100, 315, 110], fill=(163, 230, 53))
-        # Robotic Arms
         draw.line([200, 180, 120, 240], fill=(163, 230, 53), width=4)
         draw.line([400, 180, 480, 240], fill=(163, 230, 53), width=4)
-        # All-Terrain Rover Wheels
         draw.ellipse([160, 250, 230, 320], fill=(15, 23, 42), outline=(163, 230, 53), width=3)
         draw.ellipse([370, 250, 440, 320], fill=(15, 23, 42), outline=(163, 230, 53), width=3)
     
@@ -198,6 +194,7 @@ menu = st.sidebar.radio(
     "Navigation System",
     [
         "🚀 Platform Overview",
+        "💬 BioSync AI Talk (Assistant)",
         "🤖 Vision 2057: Robotic Farming",
         "🌐 Spatial Health Heatmap",
         "🔬 Multispectral Vision Engine",
@@ -243,7 +240,54 @@ if menu == "🚀 Platform Overview":
         st.write("Fully automated sowing, weeding, and targeted intervention robotics.")
 
 # -----------------------------------------------------------------------------
-# MODULE 2: VISION 2057 (ROBOTIC FARMING ROADMAP)
+# MODULE 2: BIOSYNC AI TALK (INTERACTIVE ASSISTANT)
+# -----------------------------------------------------------------------------
+elif menu == "💬 BioSync AI Talk (Assistant)":
+    st.markdown("<h1 style='color:#a3e635;'>BioSync AI Talk Assistant</h1>", unsafe_allow_html=True)
+    st.write("Ask any questions regarding AgTech, modern farming practices, soil health, crop diagnostics, or how to use BioSyncAI features!")
+
+    # Initialize Chat History in Session State
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = [
+            {"role": "assistant", "content": "Hello! I am your BioSyncAI AgTech Assistant. How can I assist you with agricultural queries, smart farming, or site navigation today?"}
+        ]
+
+    # Render Chat History
+    for message in st.session_state.chat_history:
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+
+    # Chat Input Box
+    user_query = st.chat_input("Type your question here (e.g., 'How does the Spatial Heatmap work?' or 'What is NDVI?')...")
+
+    if user_query:
+        st.session_state.chat_history.append({"role": "user", "content": user_query})
+        with st.chat_message("user"):
+            st.write(user_query)
+
+        # Smart Knowledge Base Rules for Instant Response
+        q_lower = user_query.lower()
+        if "heatmap" in q_lower or "spatial" in q_lower:
+            response = "The **Spatial Health Heatmap** uses satellite imagery and sensor microclimate data (soil moisture, temperature, humidity) to create a color-coded grid mapping disease risks across your farm fields."
+        elif "ndvi" in q_lower or "vision" in q_lower or "multispectral" in q_lower:
+            response = "The **Multispectral Vision Engine** applies optical filters like Pseudo-NDVI (Normalized Difference Vegetation Index) and Thermal Anomaly maps to detect hidden crop stress, leaf damage, or fungal pathogens before they become visible to the naked eye."
+        elif "2057" in q_lower or "robot" in q_lower or "future" in q_lower:
+            response = "Our **Vision 2057 Roadmap** plans for 100% autonomous, robotic farming worldwide—utilizing solar-powered autonomous rovers and drones for seeding, weeding, and chemical-free micro-harvesting."
+        elif "disease" in q_lower or "ai" in q_lower or "model" in q_lower or "inference" in q_lower:
+            response = "The **Multimodal AI Engine** combines live microclimate metrics (humidity, rain, bio-resonance frequency) using a Random Forest machine learning classifier to predict fungal blight threats with high confidence."
+        elif "partner" in q_lower or "contact" in q_lower or "titans" in q_lower:
+            response = "BioSyncAI is developed by **ALGORITHMIC TITANS**. You can contact our core enterprise team directly at `algorithmictitans113@gmail.com`."
+        elif "irrigation" in q_lower or "yield" in q_lower or "water" in q_lower:
+            response = "The **Yield Outlook & Water Grid** tracks harvest tonnage forecasts and soil saturation levels to provide automated irrigation recommendations, conserving up to 25% water."
+        else:
+            response = f"That is a great question regarding AgTech! **BioSyncAI** integrates IoT sensor telemetry, satellite remote sensing, computer vision, and machine learning models to help agribusinesses optimize yields and achieve sustainable farming goals. If you have specific questions about our diagnostic modules, feel free to ask!"
+
+        st.session_state.chat_history.append({"role": "assistant", "content": response})
+        with st.chat_message("assistant"):
+            st.write(response)
+
+# -----------------------------------------------------------------------------
+# MODULE 3: VISION 2057 (ROBOTIC FARMING ROADMAP)
 # -----------------------------------------------------------------------------
 elif menu == "🤖 Vision 2057: Robotic Farming":
     st.markdown("<h1 style='color:#a3e635;'>Vision 2057: The Autonomous Robotic Era</h1>", unsafe_allow_html=True)
@@ -274,7 +318,7 @@ elif menu == "🤖 Vision 2057: Robotic Farming":
         """)
 
 # -----------------------------------------------------------------------------
-# MODULE 3: SPATIAL HEALTH HEATMAP
+# MODULE 4: SPATIAL HEALTH HEATMAP
 # -----------------------------------------------------------------------------
 elif menu == "🌐 Spatial Health Heatmap":
     st.markdown("<h1 style='color:#a3e635;'>Operating Decision & Spatial Matrix</h1>", unsafe_allow_html=True)
@@ -306,7 +350,7 @@ elif menu == "🌐 Spatial Health Heatmap":
         st.dataframe(df_grid, use_container_width=True, height=340)
 
 # -----------------------------------------------------------------------------
-# MODULE 4: MULTISPECTRAL VISION ENGINE
+# MODULE 5: MULTISPECTRAL VISION ENGINE
 # -----------------------------------------------------------------------------
 elif menu == "🔬 Multispectral Vision Engine":
     st.markdown("<h1 style='color:#a3e635;'>Multispectral Vision Engine</h1>", unsafe_allow_html=True)
@@ -342,7 +386,7 @@ elif menu == "🔬 Multispectral Vision Engine":
             st.image(processed_image, caption=f"Active Filter: {vision_mode}", use_container_width=True)
 
 # -----------------------------------------------------------------------------
-# MODULE 5: MULTIMODAL AI DIAGNOSTIC
+# MODULE 6: MULTIMODAL AI DIAGNOSTIC
 # -----------------------------------------------------------------------------
 elif menu == "🧠 Multimodal AI Diagnostic":
     st.markdown("<h1 style='color:#a3e635;'>Multimodal AI Inference Engine</h1>", unsafe_allow_html=True)
@@ -368,7 +412,7 @@ elif menu == "🧠 Multimodal AI Diagnostic":
                 st.success(f"✅ **HEALTHY FIELD STATUS**\n*Confidence:* `{prob[0]*100:.2f}%`")
 
 # -----------------------------------------------------------------------------
-# MODULE 6: YIELD OUTLOOK & WATER GRID
+# MODULE 7: YIELD OUTLOOK & WATER GRID
 # -----------------------------------------------------------------------------
 elif menu == "📊 Yield Outlook & Water Grid":
     st.markdown("<h1 style='color:#a3e635;'>Harvest Forecast & Irrigation</h1>", unsafe_allow_html=True)
@@ -383,7 +427,7 @@ elif menu == "📊 Yield Outlook & Water Grid":
             st.progress(0.78)
 
 # -----------------------------------------------------------------------------
-# MODULE 7: REQUEST ENTERPRISE DEMO
+# MODULE 8: REQUEST ENTERPRISE DEMO
 # -----------------------------------------------------------------------------
 elif menu == "📞 Request Enterprise Demo":
     st.markdown("<h1 style='color:#a3e635;'>Talk to Our Enterprise Team</h1>", unsafe_allow_html=True)
@@ -420,7 +464,7 @@ elif menu == "📞 Request Enterprise Demo":
                     st.error("Please fill in required fields.")
 
 # -----------------------------------------------------------------------------
-# MODULE 8: CAREERS & TALENT HUB
+# MODULE 9: CAREERS & TALENT HUB
 # -----------------------------------------------------------------------------
 elif menu == "💼 Careers & Talent Hub":
     st.markdown("<h1 style='color:#a3e635;'>Careers at BioSyncAI</h1>", unsafe_allow_html=True)
@@ -438,7 +482,7 @@ elif menu == "💼 Careers & Talent Hub":
         """)
 
 # -----------------------------------------------------------------------------
-# MODULE 9: RFP REPORT GENERATOR
+# MODULE 10: RFP REPORT GENERATOR
 # -----------------------------------------------------------------------------
 elif menu == "📄 RFP Report Generator":
     st.markdown("<h1 style='color:#a3e635;'>Enterprise RFP & Agronomic Export</h1>", unsafe_allow_html=True)
@@ -461,7 +505,7 @@ RECOMMENDED ACTION PLAN:
     st.download_button("📥 Download Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
 
 # -----------------------------------------------------------------------------
-# MODULE 10: PARTNER & ACKNOWLEDGEMENTS
+# MODULE 11: PARTNER & ACKNOWLEDGEMENTS
 # -----------------------------------------------------------------------------
 elif menu == "ℹ️ Partner & Acknowledgements":
     st.markdown("""
