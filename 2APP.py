@@ -103,7 +103,7 @@ We have received your consultation request regarding the {domain_name} domain.
 Our team at ALGORITHMIC TITANS has logged your requirement:
 "{user_message if user_message else 'Enterprise AgTech Operations'}"
 
-A technical representative will get in touch with you shortly.
+A technical representative will get in touch with you shortly via email.
 
 Best regards,
 BioSyncAI Enterprise Team
@@ -193,7 +193,6 @@ if menu == "📞 Talk to Us (Request Demo)":
         ---
         #### Contact Direct:
         * **Partner Email:** `lakshaybhagat242010@gmail.com`
-        * **Global Support:** +1 202 555 0101
         """)
 
     with col_form:
@@ -203,7 +202,6 @@ if menu == "📞 Talk to Us (Request Demo)":
             f_name = st.text_input("First Name *")
             l_name = st.text_input("Last Name *")
             email = st.text_input("Work Email *")
-            phone = st.text_input("Phone Number (+1 202 555 0101)")
             
             job_role = st.selectbox("Job Role", ["Select your role", "Agronomist / Farm Manager", "Enterprise Executive", "Supply Chain Lead", "Government Official", "Researcher"])
             domain = st.selectbox("Domain", ["Select your domain", "Food-Ag", "Forest", "Water", "Energy", "Infrastructure", "Banking & Insurance"])
