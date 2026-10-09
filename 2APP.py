@@ -1,10 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from PIL import Image, ImageEnhance, ImageFilter, ImageOps
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps, ImageDraw
 from sklearn.ensemble import RandomForestClassifier
 
 # -----------------------------------------------------------------------------
@@ -83,44 +80,22 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 2. REAL EMAIL DISPATCH FUNCTION
+# 2. HELPER TO GENERATE SAMPLE IMAGE IF NONE UPLOADED
 # -----------------------------------------------------------------------------
-def send_real_email(recipient_email, recipient_name, domain_name, user_message):
-    try:
-        sender_email = st.secrets["SMTP_EMAIL"]
-        sender_password = st.secrets["SMTP_PASSWORD"]
-
-        msg = MIMEMultipart()
-        msg['From'] = f"BioSyncAI Enterprise <{sender_email}>"
-        msg['To'] = recipient_email
-        msg['Subject'] = "Confirmation - BioSyncAI Enterprise Consultation Request"
-
-        body = f"""Hello {recipient_name},
-
-Thank you for reaching out to BioSyncAI Enterprise!
-
-We have received your consultation request regarding the {domain_name} domain.
-Our team at ALGORITHMIC TITANS has logged your requirement:
-"{user_message if user_message else 'Enterprise AgTech Operations'}"
-
-A technical representative will get in touch with you shortly via email.
-
-Best regards,
-BioSyncAI Enterprise Team
-Partner: ALGORITHMIC TITANS
-Contact: lakshaybhagat242010@gmail.com
-"""
-        msg.attach(MIMEText(body, 'plain'))
-
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.send_message(msg)
-        server.quit()
-        return True
-    except Exception as e:
-        st.error(f"Email Dispatch Exception: {e}")
-        return False
+def get_sample_leaf_image():
+    img = Image.new('RGB', (400, 400), color=(15, 30, 20))
+    draw = ImageDraw.Draw(img)
+    # Draw leaf shape
+    draw.ellipse([80, 50, 320, 350], fill=(34, 139, 34), outline=(50, 205, 50))
+    draw.line([200, 50, 200, 350], fill=(50, 205, 50), width=4)
+    # Draw leaf veins
+    draw.line([200, 150, 120, 100], fill=(50, 205, 50), width=2)
+    draw.line([200, 200, 280, 150], fill=(50, 205, 50), width=2)
+    draw.line([200, 250, 130, 210], fill=(50, 205, 50), width=2)
+    # Draw disease spots
+    draw.ellipse([150, 180, 180, 210], fill=(139, 69, 19))
+    draw.ellipse([230, 220, 260, 250], fill=(139, 69, 19))
+    return img
 
 # -----------------------------------------------------------------------------
 # 3. MACHINE LEARNING DIAGNOSTIC MODEL
@@ -175,7 +150,7 @@ st.sidebar.markdown("---")
 st.sidebar.info("📡 **BioSync Core:** Active\n🛰️ **Global Mesh:** 103+ Countries\n🧬 **Partner:** ALGORITHMIC TITANS")
 
 # -----------------------------------------------------------------------------
-# MODULE 1: TALK TO US (REQUEST DEMO & REAL EMAIL DISPATCH)
+# MODULE 1: TALK TO US (DEMO SALES FUNNEL)
 # -----------------------------------------------------------------------------
 if menu == "📞 Talk to Us (Request Demo)":
     st.markdown("<div class='cropin-header'>Request a Conversation</div>", unsafe_allow_html=True)
@@ -192,7 +167,7 @@ if menu == "📞 Talk to Us (Request Demo)":
         
         ---
         #### Contact Direct:
-        * **Partner Email:** `lakshaybhagat242010@gmail.com`
+        * **Partner Email:** `algorithmictitans113@gmail.com`
         """)
 
     with col_form:
@@ -214,17 +189,17 @@ if menu == "📞 Talk to Us (Request Demo)":
 
             if submitted:
                 if f_name and l_name and email:
-                    with st.spinner("Sending automated confirmation email..."):
-                        sent_success = send_real_email(
-                            recipient_email=email,
-                            recipient_name=f"{f_name} {l_name}",
-                            domain_name=domain,
-                            user_message=decision_goals
-                        )
-                    if sent_success:
-                        st.success(f"✅ Confirmation email sent successfully to `{email}`!")
-                    else:
-                        st.warning("Request recorded, but email dispatch failed. Ensure Streamlit Secrets are configured correctly.")
+                    st.success(f"✅ Thank you {f_name}! Your request has been recorded successfully.")
+                    st.info(f"""
+                    📩 **Simulated Enterprise Dispatch Summary**
+                    
+                    * **Recipient:** `{email}`
+                    * **Partner Email:** `algorithmictitans113@gmail.com`
+                    * **Domain Selected:** {domain}
+                    * **Decision Goals:** {decision_goals if decision_goals else 'Enterprise AgTech Operations'}
+                    
+                    An automated representative from **ALGORITHMIC TITANS** will process your request.
+                    """)
                 else:
                     st.error("Please fill in required fields: First Name, Last Name, and Work Email.")
 
@@ -271,27 +246,31 @@ elif menu == "🔬 Multispectral Vision Diagnostics":
 
         if uploaded_file is not None:
             image = Image.open(uploaded_file).convert("RGB")
-            c1, c2 = st.columns(2)
+        else:
+            st.caption("⚡ Showing default generated sample leaf image for demonstration.")
+            image = get_sample_leaf_image()
 
-            with c1:
-                st.subheader("Original RGB View")
-                st.image(image, use_container_width=True)
+        c1, c2 = st.columns(2)
 
-            with c2:
-                st.subheader("Spectral Processing Channel")
-                vision_mode = st.selectbox("Select Filter Channel", ["Chlorophyll Index (Pseudo-NDVI)", "Lesion Edge Tracer", "Thermal Anomaly Map"])
+        with c1:
+            st.subheader("Original RGB View")
+            st.image(image, use_container_width=True)
 
-                if vision_mode == "Chlorophyll Index (Pseudo-NDVI)":
-                    r, g, b = image.split()
-                    processed_image = Image.merge("RGB", (b, ImageEnhance.Contrast(g).enhance(2.0), r))
-                elif vision_mode == "Lesion Edge Tracer":
-                    gray = image.convert("L")
-                    processed_image = ImageOps.invert(gray.filter(ImageFilter.FIND_EDGES))
-                elif vision_mode == "Thermal Anomaly Map":
-                    r, g, b = image.split()
-                    processed_image = Image.merge("RGB", (g, r, b))
+        with c2:
+            st.subheader("Spectral Processing Channel")
+            vision_mode = st.selectbox("Select Filter Channel", ["Chlorophyll Index (Pseudo-NDVI)", "Lesion Edge Tracer", "Thermal Anomaly Map"])
 
-                st.image(processed_image, caption=f"Active Filter: {vision_mode}", use_container_width=True)
+            if vision_mode == "Chlorophyll Index (Pseudo-NDVI)":
+                r, g, b = image.split()
+                processed_image = Image.merge("RGB", (b, ImageEnhance.Contrast(g).enhance(2.0), r))
+            elif vision_mode == "Lesion Edge Tracer":
+                gray = image.convert("L")
+                processed_image = ImageOps.invert(gray.filter(ImageFilter.FIND_EDGES))
+            elif vision_mode == "Thermal Anomaly Map":
+                r, g, b = image.split()
+                processed_image = Image.merge("RGB", (g, r, b))
+
+            st.image(processed_image, caption=f"Active Filter: {vision_mode}", use_container_width=True)
 
 # -----------------------------------------------------------------------------
 # MODULE 4: MULTIMODAL AI ENGINE
@@ -344,7 +323,7 @@ elif menu == "📄 Enterprise RFP & Report Export":
         report_text = """====================================================
 BIOSYNCAI ENTERPRISE AGRONOMIC REPORT
 Partner: ALGORITHMIC TITANS
-Contact: lakshaybhagat242010@gmail.com
+Contact: algorithmictitans113@gmail.com
 ====================================================
 
 Overall Health Status: Moderate Risk (Zone B Flagged)
@@ -368,7 +347,7 @@ elif menu == "ℹ️ Partner & Acknowledgements":
     <div class='partner-card'>
         <h3>🤝 Official Development Partner</h3>
         <h2 style='color:#84cc16 !important; margin-top:0;'>ALGORITHMIC TITANS</h2>
-        <p><strong>Contact Email:</strong> <a href='mailto:lakshaybhagat242010@gmail.com' style='color:#84cc16;'>lakshaybhagat242010@gmail.com</a></p>
+        <p><strong>Contact Email:</strong> <a href='mailto:algorithmictitans113@gmail.com' style='color:#84cc16;'>algorithmictitans113@gmail.com</a></p>
     </div>
     """, unsafe_allow_html=True)
 
