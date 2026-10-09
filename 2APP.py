@@ -5,30 +5,32 @@ from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 from sklearn.ensemble import RandomForestClassifier
 
 # -----------------------------------------------------------------------------
-# 1. PAGE CONFIGURATION & ENTERPRISE STYLING
+# 1. PAGE CONFIGURATION & CROPIN-STYLE DARK THEME
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="BioSyncAI Platform | Algorithmic Titans",
+    page_title="BioSyncAI | Enterprise Intelligence Platform",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Enterprise Custom Theme
+# Custom Cropin-style Dark Theme Styling
 st.markdown("""
     <style>
-    .main { background-color: #0b0f19; color: #f3f4f6; }
-    .stMetric { background-color: #111827; border: 1px solid #10b981; padding: 18px; border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1); }
-    .stButton>button { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; border: none; border-radius: 8px; font-weight: bold; width: 100%; height: 48px; font-size: 15px; }
-    .stButton>button:hover { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: #ffffff; }
+    .main { background-color: #04080e; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+    .stMetric { background-color: #0d1520; border: 1px solid #10b981; padding: 18px; border-radius: 8px; }
+    .cropin-header { color: #84cc16; font-size: 28px; font-weight: 700; margin-bottom: 5px; }
+    .cropin-card { background-color: #0d1520; border-left: 4px solid #84cc16; padding: 18px; border-radius: 6px; margin-bottom: 15px; }
+    .stButton>button { background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%); color: #000000; border: none; border-radius: 6px; font-weight: bold; width: 100%; height: 48px; font-size: 16px; }
+    .stButton>button:hover { background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%); color: #000000; }
     </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 2. MACHINE LEARNING ENGINE
+# 2. MACHINE LEARNING DIAGNOSTIC MODEL
 # -----------------------------------------------------------------------------
 @st.cache_resource
-def train_master_biosync_model():
+def train_biosync_model():
     np.random.seed(42)
     n_samples = 3000
 
@@ -52,82 +54,111 @@ def train_master_biosync_model():
     clf.fit(X, y)
     return clf
 
-model = train_master_biosync_model()
+model = train_biosync_model()
 
 # -----------------------------------------------------------------------------
-# 3. GLOBAL NAVIGATION & ENTERPRISE "TALK TO US" FORM
+# 3. GLOBAL NAVIGATION
 # -----------------------------------------------------------------------------
-st.sidebar.title("🌱 BioSyncAI Platform")
-st.sidebar.caption("Algorithmic Titans | Class XI")
-
-selected_plot = st.sidebar.selectbox(
-    "📍 Select Active Field Plot",
-    ["Plot 101 - North Sector (Wheat)", "Plot 102 - Zone B (Soybean)", "Plot 103 - South Sector (Maize)"]
-)
+st.sidebar.markdown("<h2 style='color:#84cc16;'>BioSyncAI Platform</h2>", unsafe_allow_html=True)
+st.sidebar.caption("Verified Intelligence for the Physical World")
 
 menu = st.sidebar.radio(
-    "Platform Navigation",
+    "Navigation Hierarchy",
     [
-        "📞 Talk to Us (Enterprise Lead)",
-        "🌐 Plot Intelligence & Spatial Risk Matrix",
-        "🔬 Multispectral Vision & Image Diagnostics",
-        "🤖 Multimodal AI Diagnostic Engine",
-        "📊 Yield Outlook & Smart Irrigation",
-        "📄 Export Agronomic Report",
-        "ℹ️ Project Info & Acknowledgements"
+        "📞 Talk to Us (Request Demo)",
+        "🌐 Operating Decision & Spatial Matrix",
+        "🔬 Multispectral Vision Diagnostics",
+        "🤖 Multimodal AI Engine",
+        "📊 Yield Outlook & Irrigation",
+        "📄 Enterprise RFP & Report Export",
+        "ℹ️ Partner & Acknowledgements"
     ]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.info("📡 **Sensor Mesh:** 148 IoT Nodes Active\n🛰️ **Satellite Link:** Synced")
+st.sidebar.info("📡 **BioSync Core:** Active\n🛰️ **Global Mesh:** 103+ Countries\n🧬 **Partner:** ALGORITHMIC TITANS")
 
 # -----------------------------------------------------------------------------
-# MODULE 1: ENTERPRISE "TALK TO US" CONTACT FORM
+# MODULE 1: TALK TO US (CROPIN COPYCAT SALES FUNNEL)
 # -----------------------------------------------------------------------------
-if menu == "📞 Talk to Us (Enterprise Lead)":
-    st.title("📞 Schedule a BioSyncAI Enterprise Demo")
-    st.caption("Connect with our agritech specialists to transform your farm operations with intelligent cloud solutions.")
+if menu == "📞 Talk to Us (Request Demo)":
+    st.markdown("<div class='cropin-header'>Request a Conversation</div>", unsafe_allow_html=True)
+    st.write("Built for consequential decisions. Combine deep domain expertise with enterprise technology and global deployment experience.")
 
-    with st.form("contact_form"):
-        st.subheader("Enterprise Inquiry Form")
-        c1, c2 = st.columns(2)
-        with c1:
-            first_name = st.text_input("First Name *")
-            email = st.text_input("Work Email Address *")
-            company_size = st.selectbox("Company Size", ["1-50 employees", "51-200 employees", "201-1000 employees", "1000+ employees"])
-        with c2:
-            last_name = st.text_input("Last Name *")
-            company_name = st.text_input("Company / Organization Name *")
-            org_type = st.selectbox("Organization Type", ["Agribusiness / Enterprise", "Farming Cooperative", "Government / NGO", "Research Institution"])
+    col_info, col_form = st.columns([1, 1])
 
-        message = st.text_area("Tell us about your acreage & specific farm monitoring needs")
-        submit_btn = st.form_submit_button("🚀 Request Enterprise Consult")
+    with col_info:
+        st.markdown("""
+        ### Why BioSyncAI?
+        * **01 | Global Scale:** 250+ enterprise clients across 103+ countries.
+        * **02 | Operating Decisions:** Supply, Risk, Inspection, and Compliance workflows.
+        * **03 | Enterprise Context:** Intelligence computed across one billion acres.
+        
+        ---
+        #### Contact Direct:
+        * **Partner Email:** `algorithmictitans113@gmail.com`
+        * **Global Support:** +1 202 555 0101
+        """)
 
-        if submit_btn:
-            if first_name and last_name and email and company_name:
-                st.success(f"Thank you, {first_name}! Your inquiry for **{company_name}** has been received. Our team will contact you at `{email}` shortly.")
-            else:
-                st.error("Please fill out all required fields marked with *.")
+    with col_form:
+        with st.form("cropin_lead_form"):
+            st.subheader("Talk to Our Enterprise Team")
+            
+            f_name = st.text_input("First Name *")
+            l_name = st.text_input("Last Name *")
+            email = st.text_input("Work Email *")
+            phone = st.text_input("Phone Number (+1 202 555 0101)")
+            
+            job_role = st.selectbox("Job Role", ["Select your role", "Agronomist / Farm Manager", "Enterprise Executive", "Supply Chain Lead", "Government Official", "Researcher"])
+            domain = st.selectbox("Domain", ["Select your domain", "Food-Ag", "Forest", "Water", "Energy", "Infrastructure", "Banking & Insurance"])
+            industry = st.selectbox("Industry", ["Select your industry", "Farming & Crop Production", "Agrochemicals & Seeds", "Food Processing", "Government & NGO"])
+            region = st.selectbox("Region", ["Select your region", "North America", "Asia Pacific (India)", "Europe", "Latin America", "Middle East & Africa"])
+            
+            decision_goals = st.text_area("What decision are you trying to improve?")
+            
+            submitted = st.form_submit_button("Submit Request")
+
+            if submitted:
+                if f_name and l_name and email:
+                    st.success(f"✅ Thank you {f_name}! Your request has been recorded.")
+                    
+                    st.info(f"""
+                    📩 **Automated Message Dispatch Sent To:** `{email}`
+                    
+                    ---
+                    **From:** BioSyncAI Enterprise Team <algorithmictitans113@gmail.com>  
+                    **Subject:** Confirmation - BioSyncAI Enterprise Consultation Request  
+                    
+                    Dear {f_name} {l_name},
+                    
+                    Thank you for reaching out to BioSyncAI. We have received your inquiry for the **{domain}** domain ({industry}). 
+                    Our enterprise lead representative will review your requirements regarding:
+                    *"{decision_goals if decision_goals else 'Enterprise Operations'}"*
+                    
+                    We will get in touch with you shortly at {email} or {phone}.
+                    
+                    Best regards,  
+                    **BioSyncAI Enterprise Team**  
+                    Partner: ALGORITHMIC TITANS
+                    """)
+                else:
+                    st.error("Please enter required fields: First Name, Last Name, and Work Email.")
 
 # -----------------------------------------------------------------------------
-# MODULE 2: PLOT INTELLIGENCE & HEATMAP
+# MODULE 2: OPERATING DECISION & SPATIAL MATRIX
 # -----------------------------------------------------------------------------
-elif menu == "🌐 Plot Intelligence & Spatial Risk Matrix":
-    st.title("🌐 BioSyncAI Plot Intelligence & Spatial Risk Matrix")
-    st.caption(f"Spatial analytics and microclimate telemetry for **{selected_plot}**")
+elif menu == "🌐 Operating Decision & Spatial Matrix":
+    st.markdown("<div class='cropin-header'>Operating Decision & Spatial Risk Matrix</div>", unsafe_allow_html=True)
+    
+    with st.expander("📌 Grid Configuration & Sector Metrics", expanded=True):
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Monitored Area", "12,450 Acres", "+350 Acres")
+        m2.metric("Health Index", "84.2 / 100", "-2.1 pts")
+        m3.metric("Disease Risk Flag", "High Risk", "Zone B")
+        m4.metric("Soil Saturation", "78%", "Optimal")
 
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Monitored Grid", "12,450 Acres", "+350 Acres")
-    m2.metric("Bio-Resonance Index", "84.2 / 100", "-2.1 pts")
-    m3.metric("Disease Risk Alert", "High Risk", "Zone B Flagged")
-    m4.metric("Soil Saturation Index", "78%", "Optimal Balance")
-
-    st.markdown("---")
-    col_map, col_alerts = st.columns([2, 1])
-
-    with col_map:
-        st.subheader("🗺️ Plot-Level Spatial Health Matrix")
-        grid_dim = st.slider("Spatial Resolution Grid Size", 5, 20, 10)
+    with st.expander("🗺️ Interactive Spatial Heatmap", expanded=True):
+        grid_dim = st.slider("Resolution Grid Size", 5, 20, 10)
         sm_range = np.linspace(30, 90, grid_dim)
         hum_range = np.linspace(40, 95, grid_dim)
 
@@ -143,122 +174,123 @@ elif menu == "🌐 Plot Intelligence & Spatial Risk Matrix":
             columns=[f"Humidity {h:.0f}%" for h in hum_range]
         )
 
-        st.dataframe(
-            df_grid.style.background_gradient(cmap="YlOrRd", vmin=0, vmax=1),
-            use_container_width=True,
-            height=340
-        )
-
-    with col_alerts:
-        st.subheader("🚨 Real-Time Advisories")
-        st.error("""
-        **CRITICAL ALERT: Plot 102 (Zone B)**
-        * **Detected Strain:** Early Fungal Leaf Blight Outbreak
-        * **ML Model Confidence:** `92.4%`
-        * **Primary Trigger:** Extended canopy wetness + Humidity > 80%.
-        """)
+        st.dataframe(df_grid, use_container_width=True, height=340)
 
 # -----------------------------------------------------------------------------
-# MODULE 3: MULTISPECTRAL VISION & IMAGE DIAGNOSTICS
+# MODULE 3: MULTISPECTRAL VISION DIAGNOSTICS
 # -----------------------------------------------------------------------------
-elif menu == "🔬 Multispectral Vision & Image Diagnostics":
-    st.title("🔬 Advanced Multispectral Vision & Image Diagnostics")
+elif menu == "🔬 Multispectral Vision Diagnostics":
+    st.markdown("<div class='cropin-header'>Multispectral Vision Engine</div>", unsafe_allow_html=True)
     
-    uploaded_file = st.file_uploader("Upload Crop Leaf Sample (JPG/PNG)", type=["jpg", "png", "jpeg"])
+    with st.expander("📷 Leaf Sample Analysis & Processing Channel", expanded=True):
+        uploaded_file = st.file_uploader("Upload Crop Sample (JPG/PNG)", type=["jpg", "png", "jpeg"])
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file).convert("RGB")
-        col1, col2 = st.columns([1, 1])
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file).convert("RGB")
+            c1, c2 = st.columns(2)
 
+            with c1:
+                st.subheader("Original RGB View")
+                st.image(image, use_container_width=True)
+
+            with c2:
+                st.subheader("Spectral Processing Channel")
+                vision_mode = st.selectbox("Select Filter Channel", ["Chlorophyll Index (Pseudo-NDVI)", "Lesion Edge Tracer", "Thermal Anomaly Map"])
+
+                if vision_mode == "Chlorophyll Index (Pseudo-NDVI)":
+                    r, g, b = image.split()
+                    processed_image = Image.merge("RGB", (b, ImageEnhance.Contrast(g).enhance(2.0), r))
+                elif vision_mode == "Lesion Edge Tracer":
+                    gray = image.convert("L")
+                    processed_image = ImageOps.invert(gray.filter(ImageFilter.FIND_EDGES))
+                elif vision_mode == "Thermal Anomaly Map":
+                    r, g, b = image.split()
+                    processed_image = Image.merge("RGB", (g, r, b))
+
+                st.image(processed_image, caption=f"Active Filter: {vision_mode}", use_container_width=True)
+
+# -----------------------------------------------------------------------------
+# MODULE 4: MULTIMODAL AI ENGINE
+# -----------------------------------------------------------------------------
+elif menu == "🤖 Multimodal AI Engine":
+    st.markdown("<div class='cropin-header'>Multimodal AI Inference Engine</div>", unsafe_allow_html=True)
+
+    with st.expander("🎛️ Microclimate & Bio-Acoustic Inputs", expanded=True):
+        col1, col2 = st.columns(2)
         with col1:
-            st.subheader("Original RGB Field Sample")
-            st.image(image, use_container_width=True)
-            contrast_val = st.slider("Enhance Visual Contrast", 0.5, 2.5, 1.0)
-            enhancer = ImageEnhance.Contrast(image)
-            st.image(enhancer.enhance(contrast_val), caption="Contrast Adjusted View", use_container_width=True)
-
+            in_sm = st.slider("Soil Moisture (%)", 0.0, 100.0, 82.0)
+            in_temp = st.slider("Ambient Temp (°C)", 10.0, 50.0, 28.0)
+            in_hum = st.slider("Humidity (%)", 0.0, 100.0, 86.0)
         with col2:
-            st.subheader("Multispectral Channel Analyzer")
-            vision_mode = st.selectbox(
-                "Select Visual Channel Filter",
-                ["Chlorophyll Index (Pseudo-NDVI)", "Lesion & Contour Edge Tracer", "Thermal Stress Map"]
-            )
+            in_rain = st.slider("Precipitation (mm)", 0.0, 100.0, 12.5)
+            in_freq = st.slider("Bio-Resonance Frequency (Hz)", 300, 900, 520)
 
-            if vision_mode == "Chlorophyll Index (Pseudo-NDVI)":
-                r, g, b = image.split()
-                processed_image = Image.merge("RGB", (b, ImageEnhance.Contrast(g).enhance(2.2), r))
-            elif vision_mode == "Lesion & Contour Edge Tracer":
-                gray = image.convert("L")
-                processed_image = ImageOps.invert(gray.filter(ImageFilter.FIND_EDGES))
-            elif vision_mode == "Thermal Stress Map":
-                r, g, b = image.split()
-                processed_image = Image.merge("RGB", (g, r, b))
+        if st.button("🚀 Run Live AI Inference"):
+            feat = np.array([[in_sm, in_temp, in_hum, in_rain, in_freq]])
+            pred = model.predict(feat)[0]
+            prob = model.predict_proba(feat)[0]
 
-            st.image(processed_image, caption=f"Active Filter: {vision_mode}", use_container_width=True)
-    else:
-        st.info("Upload a leaf sample to perform computer vision channels processing.")
-
-# -----------------------------------------------------------------------------
-# MODULE 4: MULTIMODAL AI DIAGNOSTIC ENGINE
-# -----------------------------------------------------------------------------
-elif menu == "🤖 Multimodal AI Diagnostic Engine":
-    st.title("🤖 Multimodal Machine Learning Diagnostic Engine")
-    
-    col_in1, col_in2 = st.columns(2)
-    with col_in1:
-        in_sm = st.slider("Soil Moisture (%)", 0.0, 100.0, 82.0)
-        in_temp = st.slider("Ambient Temperature (°C)", 10.0, 50.0, 28.0)
-        in_hum = st.slider("Relative Humidity (%)", 0.0, 100.0, 86.0)
-    with col_in2:
-        in_rain = st.slider("Precipitation (mm)", 0.0, 100.0, 12.5)
-        in_freq = st.slider("Bio-Acoustic Plant Resonance (Hz)", 300, 900, 520)
-
-    if st.button("🚀 Run Live Machine Learning Inference"):
-        feat_vector = np.array([[in_sm, in_temp, in_hum, in_rain, in_freq]])
-        pred_class = model.predict(feat_vector)[0]
-        prob_scores = model.predict_proba(feat_vector)[0]
-
-        res1, res2 = st.columns(2)
-        with res1:
-            if pred_class == 1:
-                st.error(f"🚨 **HIGH RISK DETECTED: Fungal Leaf Blight**\n*Confidence:* `{prob_scores[1]*100:.2f}%`")
+            if pred == 1:
+                st.error(f"🚨 **HIGH RISK DETECTED: Fungal Leaf Blight Threat**\n*Confidence:* `{prob[1]*100:.2f}%`")
             else:
-                st.success(f"✅ **HEALTHY FIELD STATUS**\n*Confidence:* `{prob_scores[0]*100:.2f}%`")
-        with res2:
-            st.write("1. Apply targeted copper-based fungicide.\n2. Adjust irrigation flow by 20%.")
+                st.success(f"✅ **HEALTHY FIELD STATUS**\n*Confidence:* `{prob[0]*100:.2f}%`")
 
 # -----------------------------------------------------------------------------
-# MODULE 5: YIELD OUTLOOK & SMART IRRIGATION
+# MODULE 5: YIELD OUTLOOK & IRRIGATION
 # -----------------------------------------------------------------------------
-elif menu == "📊 Yield Outlook & Smart Irrigation":
-    st.title("📊 Harvest Yield & Smart Irrigation Analytics")
-    c1, c2 = st.columns(2)
-    with c1:
-        st.metric("Estimated Harvest", "4.25 Tons / Hectare", "+8.2% vs Baseline")
-        st.line_chart(pd.DataFrame({'Yield': [3.8, 3.9, 4.0, 4.1, 4.25]}))
-    with c2:
-        st.metric("Soil Moisture Index", "78%", "Slightly Elevated")
-        st.progress(0.78)
+elif menu == "📊 Yield Outlook & Irrigation":
+    st.markdown("<div class='cropin-header'>Harvest Yield & Irrigation Analytics</div>", unsafe_allow_html=True)
+    
+    with st.expander("🌾 Crop Yield Forecast & Water Controller", expanded=True):
+        c1, c2 = st.columns(2)
+        with c1:
+            st.metric("Estimated Yield", "4.25 Tons / Hectare", "+8.2%")
+            st.line_chart(pd.DataFrame({'Yield': [3.8, 3.9, 4.0, 4.1, 4.25]}))
+        with c2:
+            st.metric("Soil Moisture Index", "78%", "Slightly Elevated")
+            st.progress(0.78)
 
 # -----------------------------------------------------------------------------
-# MODULE 6: EXPORT AGRONOMIC REPORT
+# MODULE 6: ENTERPRISE RFP & REPORT EXPORT
 # -----------------------------------------------------------------------------
-elif menu == "📄 Export Agronomic Report":
-    st.title("📄 Autonomous Agronomic Field Report Synthesis")
-    report_text = f"BIOSYNCAI FIELD REPORT\nPlot: {selected_plot}\nStatus: Zone B Flagged\nPredicted Yield: 4.25 Tons/Ha"
-    st.text_area("Report Preview", report_text, height=200)
-    st.download_button("📥 Download Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
+elif menu == "📄 Enterprise RFP & Report Export":
+    st.markdown("<div class='cropin-header'>Enterprise RFP & Agronomic Report</div>", unsafe_allow_html=True)
+    
+    with st.expander("📝 Generate Automated Report", expanded=True):
+        report_text = """====================================================
+BIOSYNCAI ENTERPRISE AGRONOMIC REPORT
+Partner: ALGORITHMIC TITANS
+Contact: algorithmictitans113@gmail.com
+====================================================
+
+Overall Health Status: Moderate Risk (Zone B Flagged)
+Estimated Harvest Yield: 4.25 Tons / Hectare
+Active Sensor Nodes: 148 Units
+
+RECOMMENDED ACTION PLAN:
+1. Apply targeted copper-based fungicide to Zone B.
+2. Reduce micro-irrigation flow in Zone B by 20%.
+===================================================="""
+        st.text_area("Report Content", report_text, height=200)
+        st.download_button("📥 Download Agronomic Report (.txt)", data=report_text, file_name="BioSyncAI_Report.txt")
 
 # -----------------------------------------------------------------------------
-# MODULE 7: PROJECT INFO & ACKNOWLEDGEMENTS
+# MODULE 7: PARTNER & ACKNOWLEDGEMENTS
 # -----------------------------------------------------------------------------
-elif menu == "ℹ️ Project Info & Acknowledgements":
-    st.title("ℹ️ Project Information & Acknowledgements")
+elif menu == "ℹ️ Partner & Acknowledgements":
+    st.markdown("<div class='cropin-header'>Partner Information & Contact</div>", unsafe_allow_html=True)
+
     st.markdown("""
-    * **Project Title:** Agricultural AI Solutions for Sustainable Agriculture
-    * **Model Name:** BioSyncAI Platform
-    * **Event:** OlympAI Hackathon 2026
-    * **Team Name:** Algorithmic Titans (Class XI)
-    * **Team Members:** Badal Kumar, Lakshay Bhagat, Aarav Sanchan
-    * **Advisor:** Ms. Nisha Yadav
-    """)
+    <div class='cropin-card'>
+        <h3>🤝 Official Development Partner</h3>
+        <h2 style='color:#84cc16; margin-top:0;'>ALGORITHMIC TITANS</h2>
+        <p><strong>Contact Email:</strong> <a href='mailto:algorithmictitans113@gmail.com' style='color:#84cc16;'>algorithmictitans113@gmail.com</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with st.expander("ℹ️ Project & Platform Details", expanded=True):
+        st.markdown("""
+        * **Platform Name:** BioSyncAI Enterprise Platform
+        * **Core Technology:** Multimodal Machine Learning & Multispectral Computer Vision
+        * **Domain:** Agricultural Intelligence & Climate Resilience
+        """)
