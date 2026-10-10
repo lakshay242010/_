@@ -74,7 +74,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR NAVIGATION (Canva Style) ---
+# --- SIDEBAR NAVIGATION ---
 with st.sidebar:
     st.markdown("### 🎨 **BhagaTube**")
     if st.button("🏠 Home", use_container_width=True):
@@ -106,7 +106,7 @@ with st.sidebar:
 # --- BUSINESS MODAL POPUP ---
 if st.session_state.show_business_modal:
     st.info("👑 **Try BhagaTube Business for Free (30-Day Trial)**")
-    st.write("Unlock Brand Kits, Background Removers, 20x AI Usage, and Team Collaboration[cite: 6].")
+    st.write("Unlock Brand Kits, Background Removers, 20x AI Usage, and Team Collaboration.")
     col_m1, col_m2 = st.columns(2)
     with col_m1:
         if st.button("Start Free Trial"):
@@ -122,7 +122,6 @@ if st.session_state.show_business_modal:
 # ==================== PAGE 1: HOME DASHBOARD ====================
 if st.session_state.page == "home":
     
-    # Top Bar Search & Pro Button
     col_tb1, col_tb2, col_tb3 = st.columns([3, 1, 1])
     with col_tb1:
         search_query = st.text_input("🔍 Search anything (e.g., YouTube thumbnail, logo, presentation)", label_visibility="collapsed")
@@ -135,10 +134,10 @@ if st.session_state.page == "home":
                 st.session_state.page = "auth"
                 st.rerun()
 
-    # Main Hero Header
-    st.markdown("<div class='hero-title'>All the tools to create like a pro</div>",[cite: 1] unsafe_allow_html=True)
+    # Main Hero Header (Fixed syntax error here)
+    st.markdown("<div class='hero-title'>All the tools to create like a pro</div>", unsafe_allow_html=True)
     
-    # Category Pills Filter Bar[cite: 1]
+    # Category Pills Filter Bar
     cols = st.columns(7)
     categories = ["AI", "Social Media", "Video", "Presentation", "Print", "Try it now", "Education"]
     for i, cat in enumerate(categories):
@@ -148,7 +147,7 @@ if st.session_state.page == "home":
 
     st.write("<br>", unsafe_allow_html=True)
 
-    # Interactive Tool Cards Grid (Matching Screenshots 1 & 2)
+    # Interactive Tool Cards Grid
     c1, c2 = st.columns(2)
     
     with c1:
@@ -176,7 +175,6 @@ if st.session_state.page == "home":
 
     st.write("---")
 
-    # Second row of AI tools (Screenshot 2 & 3)
     c3, c4 = st.columns(2)
     with c3:
         st.markdown("""
@@ -201,9 +199,8 @@ if st.session_state.page == "home":
             st.rerun()
 
     st.write("---")
-    st.markdown("### Templates for absolutely anything[cite: 3, 4]")
+    st.markdown("### Templates for absolutely anything")
     
-    # Template Grid Preview (Screenshot 4)
     t1, t2, t3, t4 = st.columns(4)
     with t1:
         st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", caption="Presentation Template")
@@ -288,7 +285,6 @@ elif st.session_state.page == "editor":
     with col_canvas:
         st.subheader("Live Interactive Canvas Preview")
         
-        # Process image editing steps
         processed = canvas_img.copy()
         if filter_choice == "Grayscale":
             processed = processed.convert("L").convert("RGB")
@@ -299,13 +295,11 @@ elif st.session_state.page == "editor":
             
         processed = ImageEnhance.Brightness(processed).enhance(brightness)
         
-        # Draw text
         draw = ImageDraw.Draw(processed)
         draw.text((pos_x, pos_y), user_text, fill=text_color)
         
         st.image(processed, use_container_width=True)
         
-        # Download export button
         buf = io.BytesIO()
         processed.save(buf, format="PNG")
         st.download_button(
