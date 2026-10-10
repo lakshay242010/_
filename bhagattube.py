@@ -1,223 +1,317 @@
 import streamlit as st
-from PIL import Image, ImageEnhance, ImageFilter, ImageDraw, ImageFont
+from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
+import io
 
 # Page Configuration
 st.set_page_config(
-    page_title="BhagaTube",
+    page_title="BhagaTube - Design Anything",
     page_icon="🎨",
     layout="wide"
 )
 
-# Initialize Session State for Authentication & Navigation
+# Initialize Session State
+if "page" not in st.session_state:
+    st.session_state.page = "home"
+if "selected_tool" not in st.session_state:
+    st.session_state.selected_tool = "All"
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "username" not in st.session_state:
     st.session_state.username = ""
-if "page" not in st.session_state:
-    st.session_state.page = "home"
-if "users_db" not in st.session_state:
-    st.session_state.users_db = {"demo_user": "password123"} # Sample user
+if "show_business_modal" not in st.session_state:
+    st.session_state.show_business_modal = False
 
-# Custom Canva-Style Theme (Purple-Blue Gradient & Clean Layout)
+# Canva-Style Custom CSS Theme
 st.markdown("""
     <style>
     .stApp {
-        background: linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95, #1e3a8a);
-        color: white;
+        background-color: #F4F5F7;
+        color: #0e1318;
     }
-    .top-nav {
+    .top-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 20px;
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border-radius: 12px;
+        background: #FFFFFF;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border-radius: 8px;
         margin-bottom: 20px;
     }
-    .logo {
-        font-family: 'Brush Script MT', cursive, sans-serif;
-        font-style: italic;
-        font-size: 32px;
-        font-weight: bold;
-        color: #FFFFFF;
-        text-decoration: none;
-    }
-    .nav-center {
-        font-size: 14px;
-        color: #E2E8F0;
-        word-spacing: 15px;
-        font-weight: 500;
-    }
     .hero-title {
-        font-size: 48px;
+        font-size: 42px;
         font-weight: 800;
         text-align: center;
-        color: #FFFFFF;
-        margin-top: 30px;
+        color: #0e1318;
+        margin-top: 10px;
+        margin-bottom: 20px;
     }
-    .hero-subtitle {
-        font-size: 16px;
-        text-align: center;
-        color: #CBD5E1;
-        margin-bottom: 30px;
+    .category-pill {
+        display: inline-block;
+        padding: 8px 20px;
+        margin: 5px;
+        border-radius: 20px;
+        background: #FFFFFF;
+        color: #333;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        cursor: pointer;
+    }
+    .feature-card-yellow {
+        background: #FFD43B;
+        padding: 25px;
+        border-radius: 16px;
+        color: #0e1318;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .feature-card-orange {
+        background: #FF6B35;
+        padding: 25px;
+        border-radius: 16px;
+        color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- TOP NAVIGATION BAR ---
-col_logo, col_links, col_auth = st.columns([1.5, 3, 2])
-
-with col_logo:
-    if st.button("bhagatube", key="logo_btn"):
+# --- SIDEBAR NAVIGATION (Canva Style) ---
+with st.sidebar:
+    st.markdown("### 🎨 **BhagaTube**")
+    if st.button("🏠 Home", use_container_width=True):
         st.session_state.page = "home"
         st.rerun()
-
-with col_links:
-    st.markdown("<div class='nav-center'>design &nbsp;&nbsp; product &nbsp;&nbsp; plans &nbsp;&nbsp; business &nbsp;&nbsp; education &nbsp;&nbsp; help</div>", unsafe_allow_html=True)
-
-with col_auth:
+    if st.button("📁 Projects", use_container_width=True):
+        st.session_state.page = "projects"
+        st.rerun()
+    if st.button("🖼️ Templates", use_container_width=True):
+        st.session_state.page = "templates"
+        st.rerun()
+    if st.button("👑 Brand & Business", use_container_width=True):
+        st.session_state.show_business_modal = True
+    if st.button("✨ BhagaTube AI Studio", use_container_width=True):
+        st.session_state.page = "editor"
+        st.rerun()
+    st.divider()
     if not st.session_state.logged_in:
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            if st.button("Sign In"):
-                st.session_state.page = "signin"
-                st.rerun()
-        with c2:
-            if st.button("Sign Up"):
-                st.session_state.page = "signup"
-                st.rerun()
-        with c3:
-            if st.button("Log In"):
-                st.session_state.page = "login"
-                st.rerun()
+        if st.button("🔑 Log In / Sign Up", use_container_width=True):
+            st.session_state.page = "auth"
+            st.rerun()
     else:
-        st.success(f"Logged in as: {st.session_state.username}")
-        if st.button("Log Out"):
+        st.success(f"User: {st.session_state.username}")
+        if st.button("Log Out", use_container_width=True):
             st.session_state.logged_in = False
             st.session_state.username = ""
-            st.session_state.page = "home"
             st.rerun()
 
-st.divider()
+# --- BUSINESS MODAL POPUP ---
+if st.session_state.show_business_modal:
+    st.info("👑 **Try BhagaTube Business for Free (30-Day Trial)**")
+    st.write("Unlock Brand Kits, Background Removers, 20x AI Usage, and Team Collaboration[cite: 6].")
+    col_m1, col_m2 = st.columns(2)
+    with col_m1:
+        if st.button("Start Free Trial"):
+            st.success("Business Plan activated for 30 days!")
+            st.session_state.show_business_modal = False
+            st.rerun()
+    with col_m2:
+        if st.button("Close"):
+            st.session_state.show_business_modal = False
+            st.rerun()
+    st.divider()
 
-# ==================== PAGE ROUTING ====================
-
-# 1. HOME LANDING PAGE
+# ==================== PAGE 1: HOME DASHBOARD ====================
 if st.session_state.page == "home":
-    st.markdown("<div class='hero-title'>your ideas are now created by bhagatube</div>", unsafe_allow_html=True)
-    st.markdown("<div class='hero-subtitle'>also for presentations, thumbnails and posters</div>", unsafe_allow_html=True)
     
-    # Hero Image / Graphic Display
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        # Placeholder or Canva-style illustration of a person creating designs
-        st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop", 
-                 caption="Create stunning visual media seamlessly with BhagaTube Studio tools.", 
-                 use_container_width=True)
-        
-        if st.button("🚀 Start Designing Now", use_container_width=True):
-            if st.session_state.logged_in:
-                st.session_state.page = "editor"
-                st.rerun()
-            else:
-                st.session_state.page = "login"
-                st.warning("Please log in or sign up to access the design studio!")
+    # Top Bar Search & Pro Button
+    col_tb1, col_tb2, col_tb3 = st.columns([3, 1, 1])
+    with col_tb1:
+        search_query = st.text_input("🔍 Search anything (e.g., YouTube thumbnail, logo, presentation)", label_visibility="collapsed")
+    with col_tb2:
+        if st.button("👑 Try Business Free"):
+            st.session_state.show_business_modal = True
+    with col_tb3:
+        if not st.session_state.logged_in:
+            if st.button("Sign In / Up"):
+                st.session_state.page = "auth"
                 st.rerun()
 
-# 2. SIGN UP PAGE
-elif st.session_state.page == "signup":
-    st.header("📝 Create Your BhagaTube Account")
+    # Main Hero Header
+    st.markdown("<div class='hero-title'>All the tools to create like a pro</div>",[cite: 1] unsafe_allow_html=True)
     
-    with st.form("signup_form"):
-        name = st.text_input("Full Name")
-        username = st.text_input("Choose Username")
-        email = st.text_input("Email Address")
-        country = st.selectbox("Country", ["United States", "India", "United Kingdom", "Canada", "Australia", "Other"])
-        password = st.text_input("Password", type="password")
-        
-        submit_btn = st.form_submit_button("Sign Up")
-        
-        if submit_btn:
-            if username and password and email:
-                st.session_state.users_db[username] = password
-                st.session_state.logged_in = True
-                st.session_state.username = username
-                st.success("Account created successfully!")
-                st.session_state.page = "editor"
-                st.rerun()
-            else:
-                st.error("Please fill in all required fields.")
-                
+    # Category Pills Filter Bar[cite: 1]
+    cols = st.columns(7)
+    categories = ["AI", "Social Media", "Video", "Presentation", "Print", "Try it now", "Education"]
+    for i, cat in enumerate(categories):
+        with cols[i]:
+            if st.button(cat, use_container_width=True):
+                st.session_state.selected_tool = cat
+
+    st.write("<br>", unsafe_allow_html=True)
+
+    # Interactive Tool Cards Grid (Matching Screenshots 1 & 2)
+    c1, c2 = st.columns(2)
+    
+    with c1:
+        st.markdown("""
+            <div class='feature-card-yellow'>
+                <h3>Swap distracting backgrounds & transform your photos</h3>
+                <p>Instantly remove or replace image backgrounds with AI.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("Change background"):
+            st.session_state.page = "editor"
+            st.rerun()
+            
+    with c2:
+        st.markdown("""
+            <div class='feature-card-orange'>
+                <h3>Capture the essence of your brand in a logo</h3>
+                <p>Generate professional logos from a simple text prompt.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        logo_prompt = st.text_input("Logo design for...", placeholder="e.g. Coffee shop, Gaming clan...")
+        if st.button("✨ Create Logo"):
+            st.session_state.page = "editor"
+            st.rerun()
+
     st.write("---")
-    st.write("Or sign up securely with:")
-    col_g, col_a = st.columns(2)
-    with col_g:
-        if st.button("Google Account"):
-            st.session_state.logged_in = True
-            st.session_state.username = "GoogleUser"
+
+    # Second row of AI tools (Screenshot 2 & 3)
+    c3, c4 = st.columns(2)
+    with c3:
+        st.markdown("""
+            <div class='feature-card-orange'>
+                <h3>Reimagine your image with a short written prompt</h3>
+                <p>Type what you want to change, like 'Change bag to blue'.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("Try Magic Edit"):
             st.session_state.page = "editor"
             st.rerun()
-    with col_a:
-        if st.button("Apple ID"):
-            st.session_state.logged_in = True
-            st.session_state.username = "AppleUser"
+            
+    with c4:
+        st.markdown("""
+            <div class='feature-card-yellow'>
+                <h3>Generate natural-sounding AI voices & art</h3>
+                <p>Convert text to voiceovers or gorgeous digital artwork instantly.</p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("Generate voice or art"):
             st.session_state.page = "editor"
             st.rerun()
 
-# 3. LOG IN PAGE (Fast Login with Username & Password)
-elif st.session_state.page == "login" or st.session_state.page == "signin":
-    st.header("🔑 Fast Account Login")
+    st.write("---")
+    st.markdown("### Templates for absolutely anything[cite: 3, 4]")
     
-    with st.form("login_form"):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        
-        login_btn = st.form_submit_button("Log In")
-        
-        if login_btn:
-            if username in st.session_state.users_db and st.session_state.users_db[username] == password:
+    # Template Grid Preview (Screenshot 4)
+    t1, t2, t3, t4 = st.columns(4)
+    with t1:
+        st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", caption="Presentation Template")
+        if st.button("Use Template 1"):
+            st.session_state.page = "editor"
+            st.rerun()
+    with t2:
+        st.image("https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", caption="Social Media Post")
+        if st.button("Use Template 2"):
+            st.session_state.page = "editor"
+            st.rerun()
+    with t3:
+        st.image("https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400", caption="Poster Design")
+        if st.button("Use Template 3"):
+            st.session_state.page = "editor"
+            st.rerun()
+    with t4:
+        st.image("https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", caption="YouTube Thumbnail")
+        if st.button("Use Template 4"):
+            st.session_state.page = "editor"
+            st.rerun()
+
+# ==================== PAGE 2: AUTHENTICATION ====================
+elif st.session_state.page == "auth":
+    st.header("🔑 Welcome to BhagaTube")
+    tab_login, tab_signup = st.tabs(["Log In", "Sign Up"])
+    
+    with tab_login:
+        with st.form("login_form"):
+            user = st.text_input("Username")
+            pwd = st.text_input("Password", type="password")
+            if st.form_submit_button("Log In"):
                 st.session_state.logged_in = True
-                st.session_state.username = username
-                st.success(f"Welcome back, {username}!")
+                st.session_state.username = user if user else "Creator"
+                st.success("Logged in successfully!")
+                st.session_state.page = "home"
+                st.rerun()
+                
+    with tab_signup:
+        with st.form("signup_form"):
+            name = st.text_input("Full Name")
+            email = st.text_input("Email")
+            new_user = st.text_input("Choose Username")
+            new_pwd = st.text_input("Create Password", type="password")
+            if st.form_submit_button("Create Account"):
+                st.session_state.logged_in = True
+                st.session_state.username = new_user if new_user else name
+                st.success("Account created!")
                 st.session_state.page = "editor"
                 st.rerun()
-            else:
-                st.error("Invalid username or password.")
 
-# 4. BHAGATUBE DESIGN STUDIO (Canva-Style Editor)
+# ==================== PAGE 3: FULL WORKING DESIGN EDITOR ====================
 elif st.session_state.page == "editor":
-    st.header(f"🎨 BhagaTube Studio Workspace ({st.session_state.username})")
+    st.header(f"🎨 BhagaTube Studio Workspace")
     
-    tab1, tab2 = st.tabs(["🖼️ Graphic / Thumbnail Creator", "🎥 Video Editor"])
+    col_tools, col_canvas = st.columns([1, 2])
     
-    with tab1:
-        preset = st.selectbox("Canvas Template Size", ["YouTube Thumbnail (1280x720)", "Instagram Post (1080x1080)", "Presentation Slide (1920x1080)"])
+    with col_tools:
+        st.subheader("Design Toolkit")
+        template_type = st.selectbox("Format", ["YouTube Thumbnail (1280x720)", "Instagram Post (1080x1080)", "Presentation (1920x1080)"])
+        bg_color = st.color_picker("Background Fill", "#FF6B35")
         
-        bg_col = st.color_picker("Background Color", "#4C1D95")
-        
-        if "Thumbnail" in preset:
-            canvas = Image.new("RGB", (1280, 720), color=bg_col)
-        elif "Instagram" in preset:
-            canvas = Image.new("RGB", (1080, 1080), color=bg_col)
+        if "Thumbnail" in template_type:
+            canvas_img = Image.new("RGB", (1280, 720), color=bg_color)
+        elif "Instagram" in template_type:
+            canvas_img = Image.new("RGB", (1080, 1080), color=bg_color)
         else:
-            canvas = Image.new("RGB", (1920, 1080), color=bg_col)
+            canvas_img = Image.new("RGB", (1920, 1080), color=bg_color)
             
-        c1, c2 = st.columns(2)
-        with c1:
-            custom_text = st.text_input("Add Heading Text", "BhagaTube Design")
-            text_color = st.color_picker("Text Color", "#FFFFFF")
-            font_size = st.slider("Text Size", 20, 120, 60)
-            
-        # Draw text onto canvas
-        draw = ImageDraw.Draw(canvas)
-        draw.text((100, 100), custom_text, fill=text_color)
+        st.divider()
+        st.write("🔤 **Text Layers**")
+        user_text = st.text_input("Heading Text", "Create Like A Pro")
+        text_color = st.color_picker("Text Color", "#FFFFFF")
+        pos_x = st.slider("Position X", 0, canvas_img.width - 100, 100)
+        pos_y = st.slider("Position Y", 0, canvas_img.height - 100, 100)
         
-        with c2:
-            st.image(canvas, caption="Live Canva-Style Output Canvas", use_container_width=True)
+        st.divider()
+        st.write("✨ **AI Enhancements**")
+        filter_choice = st.selectbox("Apply Filter Effect", ["None", "Grayscale", "Blur", "Contour"])
+        brightness = st.slider("Brightness Boost", 0.5, 2.0, 1.0)
+
+    with col_canvas:
+        st.subheader("Live Interactive Canvas Preview")
+        
+        # Process image editing steps
+        processed = canvas_img.copy()
+        if filter_choice == "Grayscale":
+            processed = processed.convert("L").convert("RGB")
+        elif filter_choice == "Blur":
+            processed = processed.filter(ImageFilter.BLUR)
+        elif filter_choice == "Contour":
+            processed = processed.filter(ImageFilter.CONTOUR)
             
-    with tab2:
-        st.subheader("Video Editing Suite")
-        st.video("https://www.w3schools.com/html/mov_bbb.mp4")
-        st.slider("Trim Video Timeline (Seconds)", 0, 60, (0, 30))
-        st.success("Video editing timeline active.")
+        processed = ImageEnhance.Brightness(processed).enhance(brightness)
+        
+        # Draw text
+        draw = ImageDraw.Draw(processed)
+        draw.text((pos_x, pos_y), user_text, fill=text_color)
+        
+        st.image(processed, use_container_width=True)
+        
+        # Download export button
+        buf = io.BytesIO()
+        processed.save(buf, format="PNG")
+        st.download_button(
+            label="📥 Download Final Design (.png)",
+            data=buf.getvalue(),
+            file_name="bhagatube_design.png",
+            mime="image/png",
+            use_container_width=True
+        )
