@@ -1,11 +1,10 @@
 import streamlit as st
 from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
 import io
-import random
 
 # Page Setup
 st.set_page_config(
-    page_title="CreatorStudio Pro - Ultimate AI & Media Hub",
+    page_title="CreatorStudio Pro - Ultimate Media Hub",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -44,19 +43,19 @@ st.markdown("""
 # Sidebar Navigation
 with st.sidebar:
     st.title("⚡ CreatorStudio Pro")
-    st.caption("The Ultimate Content Creation Suite")
+    st.caption("The Ultimate Content Suite")
     st.write("---")
     
     app_mode = st.radio(
         "Select Studio Tool:",
-        ["🖼️ Thumbnail & Image Studio", "✍️ AI Script Generator", "📈 SEO & Tag Optimizer", "📅 Content Planner"]
+        ["🖼️ Thumbnail Studio", "✍️ AI Script Generator", "📈 SEO Optimizer", "📅 Content Planner"]
     )
     
     st.write("---")
-    st.info("💡 **Pro Tip**: Use high-contrast text overlays on your thumbnails to maximize click-through rates!")
+    st.info("💡 **Tip**: Create high-contrast text overlays to boost your click-through rates!")
 
-# ==================== TOOL 1: THUMBNAIL & IMAGE STUDIO ====================
-if app_mode == "🖼️ Thumbnail & Image Studio":
+# ==================== TOOL 1: THUMBNAIL STUDIO ====================
+if app_mode == "🖼️ Thumbnail Studio":
     st.markdown("<div class='main-header'>YouTube & Social Media Thumbnail Studio</div>", unsafe_allow_html=True)
     st.markdown("<div class='sub-text'>Design, edit, and optimize click-worthy thumbnails instantly.</div>", unsafe_allow_html=True)
     
@@ -65,40 +64,35 @@ if app_mode == "🖼️ Thumbnail & Image Studio":
     with col_ctrl:
         st.subheader("🛠️ Design Controls")
         
-        # Background Options
-        bg_choice = st.selectbox("Background Type", ["Solid Color", "Gradient Theme", "Upload Custom Image"])
+        bg_choice = st.selectbox("Background Type", ["Solid Color", "Preset Gradient", "Upload Image"], key="bg_type_select")
         
         if bg_choice == "Solid Color":
-            bg_color = st.color_picker("Pick Background Color", "#FF6B35")
+            bg_color = st.color_picker("Pick Background Color", "#FF6B35", key="solid_bg_picker")
             canvas = Image.new("RGB", (1280, 720), color=bg_color)
-        elif bg_choice == "Gradient Theme":
-            theme_grad = st.selectbox("Theme Preset", ["Cyberpunk Neon", "Sunset Orange", "Deep Ocean"])
-            # Create a base solid or filtered canvas for gradient representation
+        elif bg_choice == "Preset Gradient":
+            theme_grad = st.selectbox("Theme Preset", ["Cyberpunk Neon", "Sunset Orange", "Deep Ocean"], key="preset_select")
             base_col = "#7D2AE8" if theme_grad == "Cyberpunk Neon" else ("#FF4500" if theme_grad == "Sunset Orange" else "#00C4CC")
             canvas = Image.new("RGB", (1280, 720), color=base_col)
         else:
-            uploaded_file = st.file_uploader("Upload background image", type=["jpg", "png", "jpeg"])
+            uploaded_file = st.file_uploader("Upload background image", type=["jpg", "png", "jpeg"], key="thumb_uploader")
             if uploaded_file:
                 canvas = Image.open(uploaded_file).convert("RGB").resize((1280, 720))
             else:
                 canvas = Image.new("RGB", (1280, 720), color="#1E1B4B")
                 
         st.write("---")
-        st.write("🔤 **Text Overlay**")
-        caption_text = st.text_input("Main Heading Text", "HOW TO BUILD A STARTUP")
-        text_color = st.color_picker("Text Color", "#FFFFFF")
-        pos_x = st.slider("Horizontal Position (X)", 50, 1000, 100)
-        pos_y = st.slider("Vertical Position (Y)", 50, 600, 250)
+        caption_text = st.text_input("Main Heading Text", "HOW TO BUILD A STARTUP", key="thumb_text")
+        text_color = st.color_picker("Text Color", "#FFFFFF", key="text_color_picker")
+        pos_x = st.slider("Horizontal Position (X)", 50, 1000, 100, key="pos_x_slider")
+        pos_y = st.slider("Vertical Position (Y)", 50, 600, 250, key="pos_y_slider")
         
         st.write("---")
-        st.write("✨ **Image Filters**")
-        filter_type = st.selectbox("Filter Effect", ["None", "Grayscale", "Blur", "High Contrast"])
-        brightness = st.slider("Brightness Adjustment", 0.5, 2.0, 1.0)
+        filter_type = st.selectbox("Filter Effect", ["None", "Grayscale", "Blur", "High Contrast"], key="filter_select")
+        brightness = st.slider("Brightness Adjustment", 0.5, 2.0, 1.0, key="bright_slider")
 
     with col_prev:
         st.subheader("🖼️ Live Preview (1280x720)")
         
-        # Process Image Pipeline
         working_image = canvas.copy()
         
         if filter_type == "Grayscale":
@@ -110,13 +104,11 @@ if app_mode == "🖼️ Thumbnail & Image Studio":
             
         working_image = ImageEnhance.Brightness(working_image).enhance(brightness)
         
-        # Draw Text
         draw = ImageDraw.Draw(working_image)
         draw.text((pos_x, pos_y), caption_text, fill=text_color)
         
         st.image(working_image, use_container_width=True)
         
-        # Export Button
         buffer = io.BytesIO()
         working_image.save(buffer, format="PNG")
         st.download_button(
@@ -133,7 +125,7 @@ elif app_mode == "✍️ AI Script Generator":
     st.markdown("<div class='sub-text'>Generate professional hooks, outlines, and video scripts in seconds.</div>", unsafe_allow_html=True)
     
     with st.form("script_form"):
-        topic = st.text_input("Video Topic / Title", placeholder="e.g., 5 Coding Tips for Beginners in 2026")
+        topic = st.text_input("Video Topic / Title", placeholder="e.g., 5 Coding Tips for Beginners")
         tone = st.selectbox("Tone of Voice", ["High Energy & Engaging", "Professional & Educational", "Casual & Humorous", "Dramatic"])
         duration = st.selectbox("Target Length", ["Shorts / Reels (60 seconds)", "Standard Video (8-10 minutes)", "Deep Dive (20+ minutes)"])
         
@@ -148,23 +140,20 @@ elif app_mode == "✍️ AI Script Generator":
             st.write("---")
             
             st.markdown("### 1. The Hook (0 - 15 seconds)")
-            st.write(f"> *'Stop scrolling if you want to master {topic} without wasting months of your time. By the end of this video, you'll know the exact system top creators use.'*")
+            st.write(f"> *'Stop scrolling if you want to master {topic} without wasting months of your time.'*")
             
             st.markdown("### 2. Introduction & Overview")
-            st.write(f"> *'Welcome back to the channel. Today we are breaking down {topic} step-by-step. Let's dive straight into point number one...'*")
+            st.write(f"> *'Welcome back to the channel. Today we are breaking down {topic} step-by-step.'*")
             
             st.markdown("### 3. Core Content Body")
             st.write("> - **Point 1:** Foundation and setup mistakes to avoid.")
             st.write("> - **Point 2:** The secret shortcut nobody talks about.")
-            st.write("> - **Point 3:** Real-world execution and testing.")
             
             st.markdown("### 4. Call to Action (Outro)")
-            st.write("> *'If this helped you, hit subscribe and drop a comment below. See you in the next one!'*")
-            
-            st.download_button("📥 Download Script (.txt)", data=f"Script for: {topic}\n\nHook: ...", file_name="video_script.txt")
+            st.write("> *'If this helped you, hit subscribe and drop a comment below!'*")
 
-# ==================== TOOL 3: SEO & TAG OPTIMIZER ====================
-elif app_mode == "📈 SEO & Tag Optimizer":
+# ==================== TOOL 3: SEO OPTIMIZER ====================
+elif app_mode == "📈 SEO Optimizer":
     st.markdown("<div class='main-header'>YouTube SEO & Tag Optimizer</div>", unsafe_allow_html=True)
     st.markdown("<div class='sub-text'>Generate viral tags, search-optimized descriptions, and catchy titles.</div>", unsafe_allow_html=True)
     
@@ -183,11 +172,8 @@ elif app_mode == "📈 SEO & Tag Optimizer":
             
         st.write("---")
         st.subheader("🏷️ Recommended Viral Tags")
-        tags = [f"{keyword}", f"learn {keyword}", f"best {keyword} 2026", f"{keyword} for beginners", f"advanced {keyword}", "creator tips", "coding masterclass"]
+        tags = [f"{keyword}", f"learn {keyword}", f"best {keyword}", f"{keyword} for beginners", "creator tips", "masterclass"]
         st.code(", ".join(tags), language="text")
-        
-        st.subheader("📝 Optimized Description Snippet")
-        st.text_area("Copy-paste description template", value=f"In this video, we explore everything you need to know about {keyword}. Whether you are a beginner or looking to level up, this guide covers all essentials.\n\n🔔 Subscribe for more creator tutorials!\n#coding #tutorial #{keyword.replace(' ', '')}")
 
 # ==================== TOOL 4: CONTENT PLANNER ====================
 elif app_mode == "📅 Content Planner":
@@ -204,8 +190,6 @@ elif app_mode == "📅 Content Planner":
             st.success(f"Added '{p_title}' for {p_platform} on {p_date} ({p_status})!")
             
     st.write("---")
-    st.subheader("📋 Current Publishing Queue")
-    st.markdown("| Title | Platform | Date | Status |")
-    st.markdown("|---|---|---|---|")
-    st.markdown("| 10 Python Automation Scripts | YouTube | 2026-10-15 | In Production 🎬 |")
-    st.markdown("| AI Design Tools Breakdown | Instagram | 2026-10-18 | Idea 💡 |")
+    st.subheader("📋 Publishing Queue")
+    st.write("• **10 Python Scripts** — YouTube (In Production 🎬)")
+    st.write("• **AI Design Tools** — Instagram (Idea 💡)")
