@@ -38,7 +38,6 @@ with st.sidebar:
 
 # Check for API Key
 if not api_key_input:
-    # Alternatively, you can check st.secrets["GEMINI_API_KEY"] if deployed on Streamlit Cloud
     if "GEMINI_API_KEY" in st.secrets:
         api_key = st.secrets["GEMINI_API_KEY"]
     else:
@@ -52,7 +51,7 @@ else:
 # Initialize the Google GenAI Client
 client = genai.Client(api_key=api_key)
 
-# Strict System Instruction to restrict scope to Class 8-10 NCERT/Exam Prep
+# Strict System Instruction
 system_instruction = (
     "You are Bhagat GPT, an elite educational AI assistant created by Lakshay under Bhagat Industries. "
     "Your sole purpose is to help Class VIII, IX, and X students with their studies, including NCERT solutions, "
@@ -75,41 +74,37 @@ for message in st.session_state.messages:
 if prompt := st.chat_input(
     "Ask a Class 8-10 concept, NCERT doubt, or exam question..."
 ):
-    # Append user message to history
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Generate Assistant Response
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         message_placeholder.markdown("Thinking...")
 
         try:
-            # Format chat history for the Gemini API using the updated SDK structure
             formatted_contents = []
             for m in st.session_state.messages:
                 role = "user" if m["role"] == "user" else "model"
                 formatted_contents.append(
                     types.Content(
-                        role=role, parts=[types.Part.from_text(text=m["content"])]
+                        role=role,
+                        parts=[types.Part.from_text(text=m["content"])],
                     )
                 )
 
-            # Call Gemini model (using gemini-2.5-flash as the recommended fast text model)
             response = client.models.generate_content(
                 model="gemini-2.5-flash",
                 contents=formatted_contents,
                 config=types.GenerateContentConfig(
                     system_instruction=system_instruction,
-                    temperature=0.3,  # Lower temperature for accurate academic answers
+                    temperature=0.3,
                 ),
             )
 
             bot_response = response.text
             message_placeholder.markdown(bot_response)
 
-            # Save assistant response to history
             st.session_state.messages.append(
                 {"role": "assistant", "content": bot_response}
             )
