@@ -193,7 +193,7 @@ def generate_ai_response(query):
         return ("Our **Vision 2057 Roadmap** targets **100% autonomous robotic agriculture** through solar-powered ground rovers and aerial drone swarms.")
 
     else:
-        return (f"### 🧬 AgTech Analysis: '{query}'\n\n"
+        return (f"### 🧬AGTECH ANALYSIS: '{query}'\n\n"
                 "BioSyncAI connects orbital remote sensing, soil moisture microclimates, and machine learning classifiers to streamline farm yields and business operations.")
 
 # -----------------------------------------------------------------------------
@@ -284,7 +284,7 @@ elif menu == "💼 Enterprise Business & ROI Matrix":
 # -----------------------------------------------------------------------------
 # MODULE 3: BIOSYNC AI TALK STUDIO
 # -----------------------------------------------------------------------------
-elif menu == "💬 BioSync AI Talk Studio":
+elif menu == "💬 BIOSYNC AI":
     st.markdown("<h1 style='color:#a3e635;'>BioSync AI Talk Assistant & Studio</h1>", unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
@@ -454,7 +454,7 @@ Active Sensor Nodes: 148 Units
 # -----------------------------------------------------------------------------
 # MODULE 11: CREATED BY & TEAM
 # -----------------------------------------------------------------------------
-elif menu == "ℹ️ Created By & Team":
+elif menu == "ℹ️ Created By ":
     st.markdown("<h1 style='color:#a3e635;'>Project Credits</h1>", unsafe_allow_html=True)
 
     st.markdown("""
